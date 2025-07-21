@@ -61,9 +61,9 @@ function App() {
           </div>
 
           {/* 🎧 Listen on Spotify Button */}
-          {track.spotify_url && (
+          {track.spotify_uri && (
             <a
-              href={track.spotify_url}
+              href={track.spotify_uri}
               target="_blank"
               rel="noopener noreferrer"
               style={{
