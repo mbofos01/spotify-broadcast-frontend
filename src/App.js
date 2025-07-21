@@ -21,9 +21,7 @@ function App() {
   }, []);
 
   if (
-    !track ||
-    track.detail ||
-    (track.name === "Nothing playing" && track.artist === "None")
+    !track || !track.track_id
   ) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
