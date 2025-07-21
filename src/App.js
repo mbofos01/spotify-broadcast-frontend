@@ -78,7 +78,7 @@ function App() {
               }}
             >
               <img
-                src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Icon_RGB_White.png"
+                src="/spotify.png"
                 alt="Spotify"
                 style={{
                   width: "20px",
