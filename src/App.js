@@ -59,14 +59,34 @@ function App() {
           </div>
 
           {/* 🎧 Listen on Spotify Button */}
-          {track.spotify_link && (
+          {track.spotify_url && (
             <a
-              href={track.spotify_link}
+              href={track.spotify_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-success"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#1DB954",
+                color: "white",
+                padding: "10px 16px",
+                borderRadius: "25px",
+                textDecoration: "none",
+                fontWeight: "bold",
+                fontSize: "14px",
+              }}
             >
-              🎧 Listen on Spotify
+              <img
+                src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Icon_RGB_White.png"
+                alt="Spotify"
+                style={{
+                  width: "20px",
+                  height: "20px",
+                  marginRight: "8px",
+                }}
+              />
+              Listen on Spotify
             </a>
           )}
         </div>
