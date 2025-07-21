@@ -20,7 +20,11 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  if (!track || track.detail) {
+  if (
+    !track ||
+    track.detail ||
+    (track.name === "Nothing playing" && track.artist === "None")
+  ) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
         <h2>Nothing playing 🎧</h2>
