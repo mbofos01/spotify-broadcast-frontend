@@ -1,0 +1,65 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+function App() {
+  const [track, setTrack] = useState(null);
+
+  useEffect(() => {
+    const fetchTrack = async () => {
+      try {
+        const res = await axios.get('https://wmpofos.pythonanywhere.com/currently-playing-verbose');
+        setTrack(res.data);
+      } catch {
+        setTrack(null);
+      }
+    };
+    fetchTrack();
+    const interval = setInterval(fetchTrack, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!track || track.detail) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
+        <h2>Nothing playing 🎧</h2>
+      </div>
+    );
+  }
+
+  const progress_ms = track.progress_ms;
+  const duration_ms = track.duration_ms;
+
+  // Convert milliseconds to minutes and seconds
+  const formatTime = (ms) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+  const elapsedTime = formatTime(progress_ms);
+  const totalTime = formatTime(duration_ms);
+
+  return (
+    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
+      <div className="card" style={{ width: '18rem' }}>
+        <img src={track.image_url} className="card-img-top" alt="Track Art" />
+        <div className="card-body">
+          <h5 className="card-title">{track.track}</h5>
+          <p className="card-text">{track.artist}</p>
+          <p className="card-text">{track.album}</p>
+          <div className="progress">
+            <div
+              className="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              style={{ width: `${(progress_ms / duration_ms) * 100}%` }}
+            >
+              {elapsedTime} / {totalTime}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
