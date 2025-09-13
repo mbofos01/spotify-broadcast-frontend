@@ -4,6 +4,7 @@ import axios from "axios";
 function App() {
   const [track, setTrack] = useState(null);
   const [user, setUser] = useState(null);
+  const [topTracks, setTopTracks] = useState([]);
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -24,11 +25,21 @@ function App() {
         setUser(null);
       }
     };
+    const fetchTopTracks = async () => {
+      try {
+        const res = await axios.get("https://wmpofos.pythonanywhere.com/top-five");
+        setTopTracks(res.data.items || []);
+      } catch {
+        setTopTracks([]);
+      }
+    };
     fetchTrack();
     fetchUser();
+    fetchTopTracks();
     const interval = setInterval(() => {
       fetchTrack();
       fetchUser();
+      fetchTopTracks();
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -48,7 +59,30 @@ function App() {
               <p>Followers: {user.followers}</p>
             </div>
           )}
-          <h2>Nothing playing 🎧</h2>
+          <h2>Awfully quiet around here 🎧</h2>
+          {topTracks.length > 0 && (
+            <div className="mt-4">
+              <h5>Your Top 5 Tracks</h5>
+              <ul className="list-unstyled">
+                {topTracks.slice(0, 5).map((track) => (
+                  <li key={track.id} className="mb-3 d-flex align-items-center">
+                    <img src={track.album.images[1]?.url || track.album.images[0]?.url} alt={track.name} style={{ width: 50, height: 50, borderRadius: "8px", marginRight: 12 }} />
+                    <div>
+                      <a href={track.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}>{track.name}</a>
+                      <div style={{ fontSize: "13px" }}>
+                        {track.artists.map((artist, i) => (
+                          <span key={artist.id}>
+                            <a href={artist.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={{ color: "#fff", textDecoration: "none" }}>{artist.name}</a>
+                            {i < track.artists.length - 1 ? ", " : ""}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     );
