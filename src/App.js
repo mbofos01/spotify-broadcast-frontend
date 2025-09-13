@@ -59,7 +59,7 @@ function App() {
               <p>Followers: {user.followers}</p>
             </div>
           )}
-          <h2>Awfully quiet around here 🎧</h2>
+          <h4>Awfully quiet around here...</h4>
           {topTracks.length > 0 && (
             <div className="mt-4">
               <h5>Your Top 5 Tracks</h5>
