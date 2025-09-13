@@ -40,9 +40,12 @@ function App() {
           {user && (
             <div className="mb-4 text-center">
               <img src={user.image} alt={user.display_name} style={{ width: 80, height: 80, borderRadius: "50%" }} />
-              <h4 className="mt-2">{user.display_name}</h4>
+              <h4 className="mt-2">
+                <a href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}>
+                  {user.display_name}
+                </a>
+              </h4>
               <p>Followers: {user.followers}</p>
-              <a href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold" }}>Spotify Profile</a>
             </div>
           )}
           <h2>Nothing playing 🎧</h2>
@@ -69,9 +72,12 @@ function App() {
         {user && (
           <div className="mb-4 text-center">
             <img src={user.image} alt={user.display_name} style={{ width: 80, height: 80, borderRadius: "50%" }} />
-            <h4 className="mt-2">{user.display_name}</h4>
+            <h4 className="mt-2">
+              <a href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}>
+                {user.display_name}
+              </a>
+            </h4>
             <p>Followers: {user.followers}</p>
-            <a href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold" }}>Spotify Profile</a>
           </div>
         )}
         <div className="card text-center bg-secondary" style={{ width: "20rem" }}>
