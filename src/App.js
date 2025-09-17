@@ -6,6 +6,12 @@ function App() {
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Change this value to adjust the progress bar color/gradient.
+  // Examples:
+  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #1DB954, #1ed760)'; // Spotify green
+  const PROGRESS_GRADIENT = 'linear-gradient(90deg, #ff6a00, #ee0979)'; // orange -> pink
+  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #6a11cb, #2575fc)'; // purple -> blue
+  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #1DB954, #1ed760)';
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -147,13 +153,30 @@ function App() {
             <h5 className="card-title">{track.track}</h5>
             <p className="card-text mb-1">{track.artist}</p>
             <p className="card-text text-muted">{track.album}</p>
-            <div className="progress mb-3">
+            {/* Custom rounded gradient progress bar */}
+            <div style={{ margin: "1rem 0" }}>
               <div
-                className="progress-bar progress-bar-striped progress-bar-animated"
-                role="progressbar"
-                style={{ width: `${(progress_ms / duration_ms) * 100}%` }}
+                style={{
+                  height: 10,
+                  width: "100%",
+                  background: "rgba(255,255,255,0.08)",
+                  borderRadius: 20,
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+                title={`${elapsedTime} / ${totalTime}`}
               >
-                {elapsedTime} / {totalTime}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    height: "100%",
+                    width: `${(progress_ms / duration_ms) * 100}%`,
+                    background: PROGRESS_GRADIENT,
+                    borderRadius: 20,
+                    transition: "width 400ms ease",
+                    boxShadow: "0 0 8px rgba(29,185,84,0.3)",
+                  }}
+                />
               </div>
             </div>
 
