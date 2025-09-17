@@ -5,6 +5,7 @@ function App() {
   const [track, setTrack] = useState(null);
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -33,16 +34,42 @@ function App() {
         setTopTracks([]);
       }
     };
-    fetchTrack();
-    fetchUser();
-    fetchTopTracks();
+    // Run initial requests in parallel, then clear the loading state
+    const init = async () => {
+      await Promise.all([fetchUser(), fetchTrack(), fetchTopTracks()]);
+      setLoading(false);
+    };
+    init();
+
     const interval = setInterval(() => {
       fetchTrack();
-      fetchUser();
-      fetchTopTracks();
+      // keep polling the currently playing track only
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
+        <div className="text-center">
+          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+          <div
+            aria-hidden="true"
+            style={{
+              width: 60,
+              height: 60,
+              border: "5px solid rgba(29,185,84,0.15)",
+              borderTop: "5px solid #1DB954",
+              borderRadius: "50%",
+              margin: "0 auto",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+          <div className="mt-2">Loading…</div>
+        </div>
+      </div>
+    );
+  }
 
   if (!track || !track.track_id) {
     return (
