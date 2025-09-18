@@ -17,7 +17,7 @@ function App() {
     const fetchTrack = async () => {
       try {
         const res = await axios.get(
-          "https://wmpofos.pythonanywhere.com/currently-playing-verbose"
+          "https://spotify-broadcast-backend.vercel.app/currently-playing-verbose"
         );
         setTrack(res.data);
       } catch {
@@ -26,7 +26,7 @@ function App() {
     };
     const fetchUser = async () => {
       try {
-        const res = await axios.get("https://wmpofos.pythonanywhere.com/user-info");
+        const res = await axios.get("https://spotify-broadcast-backend.vercel.app/user-info");
         setUser(res.data);
       } catch {
         setUser(null);
@@ -34,7 +34,7 @@ function App() {
     };
     const fetchTopTracks = async () => {
       try {
-        const res = await axios.get("https://wmpofos.pythonanywhere.com/top-five");
+        const res = await axios.get("https://spotify-broadcast-backend.vercel.app/top-five");
         setTopTracks(res.data.items || []);
       } catch {
         setTopTracks([]);
