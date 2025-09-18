@@ -35,7 +35,7 @@ function App() {
     const fetchTopTracks = async () => {
       try {
         const res = await axios.get("https://spotify-broadcast-backend.vercel.app/top-five");
-        setTopTracks(res.data.items || []);
+        setTopTracks(res.data.top_tracks || []);
       } catch {
         setTopTracks([]);
       }
