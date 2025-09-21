@@ -13,7 +13,7 @@ function App() {
 
   const extractColors = async (url) => {
     try {
-      const color = await fac.getColorAsync(url);
+      const color = await fac.getColorAsync(url,{algorithm: 'dominant'});
       const darkened = color.rgb.replace("rgb", "rgba").replace(")", ",0.8)");
       return `linear-gradient(90deg, ${color.hex}, ${darkened})`;
     } catch (err) {
