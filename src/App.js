@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Vibrant from "@vibrant/core";
-import Image from "@vibrant/image";
+import { usePalette } from "react-palette";
 
 function App() {
   const [track, setTrack] = useState(null);
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [gradient, setGradient] = useState("linear-gradient(90deg, #1DB954, #1ed760)");
-
-  // Function to extract colors from image URL
-  const extractColors = async (url) => {
-    try {
-      const img = new Image(url);
-      const palette = await Vibrant.from(img).getPalette();
-      const color1 = palette.Vibrant?.hex || "#1DB954";
-      const color2 = palette.Muted?.hex || "#1ed760";
-      return `linear-gradient(90deg, ${color1}, ${color2})`;
-    } catch (err) {
-      console.error("Error extracting colors:", err);
-      return "linear-gradient(90deg, #1DB954, #1ed760)";
-    }
-  };
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -30,13 +14,7 @@ function App() {
         const res = await axios.get(
           "https://spotify-broadcast-backend.vercel.app/currently-playing-verbose"
         );
-        const trackData = res.data;
-        setTrack(trackData);
-
-        if (trackData?.image_url) {
-          const grad = await extractColors(trackData.image_url);
-          setGradient(grad);
-        }
+        setTrack(res.data);
       } catch {
         setTrack(null);
       }
@@ -44,7 +22,9 @@ function App() {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get("https://spotify-broadcast-backend.vercel.app/user-info");
+        const res = await axios.get(
+          "https://spotify-broadcast-backend.vercel.app/user-info"
+        );
         setUser(res.data);
       } catch {
         setUser(null);
@@ -53,7 +33,9 @@ function App() {
 
     const fetchTopTracks = async () => {
       try {
-        const res = await axios.get("https://spotify-broadcast-backend.vercel.app/top-five");
+        const res = await axios.get(
+          "https://spotify-broadcast-backend.vercel.app/top-five"
+        );
         setTopTracks(res.data.top_tracks || []);
       } catch {
         setTopTracks([]);
@@ -175,6 +157,11 @@ function App() {
   const elapsedTime = formatTime(progress_ms);
   const totalTime = formatTime(duration_ms);
 
+  // Use react-palette to extract colors
+  const { data: palette } = usePalette(track.image_url);
+
+  const gradient = `linear-gradient(90deg, ${palette.vibrant || "#1DB954"}, ${palette.muted || "#1ed760"})`;
+
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
       <div>
@@ -205,7 +192,7 @@ function App() {
             <p className="card-text mb-1">{track.artist}</p>
             <p className="card-text text-muted">{track.album}</p>
 
-            {/* Progress bar with vibrant gradient */}
+            {/* Progress bar */}
             <div style={{ margin: "1rem 0" }}>
               <div
                 style={{
@@ -253,11 +240,7 @@ function App() {
                 <img
                   src="/spotify.png"
                   alt="Spotify"
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    marginRight: "8px",
-                  }}
+                  style={{ width: "20px", height: "20px", marginRight: "8px" }}
                 />
                 Listen on Spotify
               </a>
