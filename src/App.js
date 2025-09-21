@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { usePalette } from "react-palette";
+import { FastAverageColor } from "fast-average-color";
 
 function App() {
   const [track, setTrack] = useState(null);
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [gradient, setGradient] = useState("linear-gradient(90deg, #1DB954, #1ed760)");
+
+  const fac = new FastAverageColor();
+
+  const extractColors = async (url) => {
+    try {
+      const color = await fac.getColorAsync(url);
+      const darkened = color.rgb.replace("rgb", "rgba").replace(")", ",0.8)");
+      return `linear-gradient(90deg, ${color.hex}, ${darkened})`;
+    } catch (err) {
+      console.error("Color extraction error:", err);
+      return "linear-gradient(90deg, #1DB954, #1ed760)";
+    }
+  };
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -14,7 +28,13 @@ function App() {
         const res = await axios.get(
           "https://spotify-broadcast-backend.vercel.app/currently-playing-verbose"
         );
-        setTrack(res.data);
+        const trackData = res.data;
+        setTrack(trackData);
+
+        if (trackData?.image_url) {
+          const grad = await extractColors(trackData.image_url);
+          setGradient(grad);
+        }
       } catch {
         setTrack(null);
       }
@@ -145,22 +165,13 @@ function App() {
     );
   }
 
-  const progress_ms = track.progress_ms;
-  const duration_ms = track.duration_ms;
-
-  const formatTime = (ms) => {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
+  const progress_ms = track.progress_ms || 0;
+  const duration_ms = track.duration_ms || 1;
+  const formatTime = (ms) =>
+    `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
 
   const elapsedTime = formatTime(progress_ms);
   const totalTime = formatTime(duration_ms);
-
-  // Use react-palette to extract colors
-  const { data: palette } = usePalette(track.image_url);
-
-  const gradient = `linear-gradient(90deg, ${palette.vibrant || "#1DB954"}, ${palette.muted || "#1ed760"})`;
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
@@ -192,7 +203,7 @@ function App() {
             <p className="card-text mb-1">{track.artist}</p>
             <p className="card-text text-muted">{track.album}</p>
 
-            {/* Progress bar */}
+            {/* Progress bar with vibrant gradient */}
             <div style={{ margin: "1rem 0" }}>
               <div
                 style={{
@@ -200,7 +211,6 @@ function App() {
                   width: "100%",
                   background: "rgba(164, 169, 174, 1)",
                   borderRadius: 20,
-                  position: "relative",
                   overflow: "hidden",
                 }}
                 title={`${elapsedTime} / ${totalTime}`}
@@ -240,7 +250,7 @@ function App() {
                 <img
                   src="/spotify.png"
                   alt="Spotify"
-                  style={{ width: "20px", height: "20px", marginRight: "8px" }}
+                  style={{ width: 20, height: 20, marginRight: 8 }}
                 />
                 Listen on Spotify
               </a>
