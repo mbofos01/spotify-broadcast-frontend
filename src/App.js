@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Vibrant from "node-vibrant";
+import Vibrant from "@vibrant/core";
+import Image from "@vibrant/image";
 
 function App() {
   const [track, setTrack] = useState(null);
@@ -8,6 +9,20 @@ function App() {
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [gradient, setGradient] = useState("linear-gradient(90deg, #1DB954, #1ed760)");
+
+  // Function to extract colors from image URL
+  const extractColors = async (url) => {
+    try {
+      const img = new Image(url);
+      const palette = await Vibrant.from(img).getPalette();
+      const color1 = palette.Vibrant?.hex || "#1DB954";
+      const color2 = palette.Muted?.hex || "#1ed760";
+      return `linear-gradient(90deg, ${color1}, ${color2})`;
+    } catch (err) {
+      console.error("Error extracting colors:", err);
+      return "linear-gradient(90deg, #1DB954, #1ed760)";
+    }
+  };
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -18,12 +33,9 @@ function App() {
         const trackData = res.data;
         setTrack(trackData);
 
-        // Extract colors from track image
-        if (trackData && trackData.image_url) {
-          const palette = await Vibrant.from(trackData.image_url).getPalette();
-          const color1 = palette.Vibrant?.hex || "#1DB954";
-          const color2 = palette.Muted?.hex || "#1ed760";
-          setGradient(`linear-gradient(90deg, ${color1}, ${color2})`);
+        if (trackData?.image_url) {
+          const grad = await extractColors(trackData.image_url);
+          setGradient(grad);
         }
       } catch {
         setTrack(null);
@@ -193,7 +205,7 @@ function App() {
             <p className="card-text mb-1">{track.artist}</p>
             <p className="card-text text-muted">{track.album}</p>
 
-            {/* Progress bar with dynamic vibrant gradient */}
+            {/* Progress bar with vibrant gradient */}
             <div style={{ margin: "1rem 0" }}>
               <div
                 style={{
