@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Vibrant from "node-vibrant";
 
 function App() {
   const [track, setTrack] = useState(null);
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Change this value to adjust the progress bar color/gradient.
-  // Examples:
-  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #1DB954, #1ed760)'; // Spotify green
-  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #ff6a00, #ee0979)'; // orange -> pink
-  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #6a11cb, #2575fc)'; // purple -> blue
-  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #1DB954, #1ed760)';
+  const [gradient, setGradient] = useState("linear-gradient(90deg, #1DB954, #1ed760)");
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -20,11 +15,21 @@ function App() {
         const res = await axios.get(
           "https://spotify-broadcast-backend.vercel.app/currently-playing-verbose"
         );
-        setTrack(res.data);
+        const trackData = res.data;
+        setTrack(trackData);
+
+        // Extract colors from track image
+        if (trackData && trackData.image_url) {
+          const palette = await Vibrant.from(trackData.image_url).getPalette();
+          const color1 = palette.Vibrant?.hex || "#1DB954";
+          const color2 = palette.Muted?.hex || "#1ed760";
+          setGradient(`linear-gradient(90deg, ${color1}, ${color2})`);
+        }
       } catch {
         setTrack(null);
       }
     };
+
     const fetchUser = async () => {
       try {
         const res = await axios.get("https://spotify-broadcast-backend.vercel.app/user-info");
@@ -33,6 +38,7 @@ function App() {
         setUser(null);
       }
     };
+
     const fetchTopTracks = async () => {
       try {
         const res = await axios.get("https://spotify-broadcast-backend.vercel.app/top-five");
@@ -41,17 +47,14 @@ function App() {
         setTopTracks([]);
       }
     };
-    // Run initial requests in parallel, then clear the loading state
+
     const init = async () => {
       await Promise.all([fetchUser(), fetchTrack(), fetchTopTracks()]);
       setLoading(false);
     };
     init();
 
-    const interval = setInterval(() => {
-      fetchTrack();
-      // keep polling the currently playing track only
-    }, 5000);
+    const interval = setInterval(fetchTrack, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -61,7 +64,6 @@ function App() {
         <div className="text-center">
           <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
           <div
-            aria-hidden="true"
             style={{
               width: 60,
               height: 60,
@@ -84,9 +86,18 @@ function App() {
         <div>
           {user && (
             <div className="mb-4 text-center">
-              <img src={user.image} alt={user.display_name} style={{ width: 80, height: 80, borderRadius: "50%" }} />
+              <img
+                src={user.image}
+                alt={user.display_name}
+                style={{ width: 80, height: 80, borderRadius: "50%" }}
+              />
               <h4 className="mt-2">
-                <a href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}>
+                <a
+                  href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}
+                >
                   {user.display_name}
                 </a>
               </h4>
@@ -100,13 +111,31 @@ function App() {
               <ul className="list-unstyled">
                 {topTracks.slice(0, 5).map((track) => (
                   <li key={track.id} className="mb-3 d-flex align-items-center">
-                    <img src={track.album.images[1]?.url || track.album.images[0]?.url} alt={track.name} style={{ width: 50, height: 50, borderRadius: "8px", marginRight: 12 }} />
+                    <img
+                      src={track.album.images[1]?.url || track.album.images[0]?.url}
+                      alt={track.name}
+                      style={{ width: 50, height: 50, borderRadius: "8px", marginRight: 12 }}
+                    />
                     <div>
-                      <a href={track.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}>{track.name}</a>
+                      <a
+                        href={track.external_urls.spotify}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}
+                      >
+                        {track.name}
+                      </a>
                       <div style={{ fontSize: "13px" }}>
                         {track.artists.map((artist, i) => (
                           <span key={artist.id}>
-                            <a href={artist.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={{ color: "#fff", textDecoration: "none" }}>{artist.name}</a>
+                            <a
+                              href={artist.external_urls.spotify}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ color: "#fff", textDecoration: "none" }}
+                            >
+                              {artist.name}
+                            </a>
                             {i < track.artists.length - 1 ? ", " : ""}
                           </span>
                         ))}
@@ -139,9 +168,18 @@ function App() {
       <div>
         {user && (
           <div className="mb-4 text-center">
-            <img src={user.image} alt={user.display_name} style={{ width: 80, height: 80, borderRadius: "50%" }} />
+            <img
+              src={user.image}
+              alt={user.display_name}
+              style={{ width: 80, height: 80, borderRadius: "50%" }}
+            />
             <h4 className="mt-2">
-              <a href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`} target="_blank" rel="noopener noreferrer" style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}>
+              <a
+                href={`https://open.spotify.com/user/${user.uri.split(":").pop()}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#1DB954", fontWeight: "bold", textDecoration: "none" }}
+              >
                 {user.display_name}
               </a>
             </h4>
@@ -154,7 +192,8 @@ function App() {
             <h5 className="card-title">{track.track}</h5>
             <p className="card-text mb-1">{track.artist}</p>
             <p className="card-text text-muted">{track.album}</p>
-            {/* Custom rounded gradient progress bar */}
+
+            {/* Progress bar with dynamic vibrant gradient */}
             <div style={{ margin: "1rem 0" }}>
               <div
                 style={{
@@ -168,11 +207,10 @@ function App() {
                 title={`${elapsedTime} / ${totalTime}`}
               >
                 <div
-                  aria-hidden="true"
                   style={{
                     height: "100%",
                     width: `${(progress_ms / duration_ms) * 100}%`,
-                    background: `linear-gradient(90deg, ${track.color_one}, ${track.color_two})`,
+                    background: gradient,
                     borderRadius: 20,
                     transition: "width 400ms ease",
                     boxShadow: "0 0 8px rgba(29,185,84,0.3)",
@@ -181,7 +219,7 @@ function App() {
               </div>
             </div>
 
-            {/* 🎧 Listen on Spotify Button */}
+            {/* Spotify Button */}
             {track.spotify_uri && (
               <a
                 href={track.spotify_uri}
