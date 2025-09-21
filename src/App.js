@@ -160,7 +160,7 @@ function App() {
                 style={{
                   height: 10,
                   width: "100%",
-                  background: "rgba(255,255,255,0.08)",
+                  background: "rgba(164, 169, 174, 1)",
                   borderRadius: 20,
                   position: "relative",
                   overflow: "hidden",
