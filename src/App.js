@@ -6,10 +6,11 @@ function App() {
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+
   // Change this value to adjust the progress bar color/gradient.
   // Examples:
   // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #1DB954, #1ed760)'; // Spotify green
-  const PROGRESS_GRADIENT = 'linear-gradient(90deg, #ff6a00, #ee0979)'; // orange -> pink
+  // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #ff6a00, #ee0979)'; // orange -> pink
   // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #6a11cb, #2575fc)'; // purple -> blue
   // const PROGRESS_GRADIENT = 'linear-gradient(90deg, #1DB954, #1ed760)';
 
@@ -171,7 +172,7 @@ function App() {
                   style={{
                     height: "100%",
                     width: `${(progress_ms / duration_ms) * 100}%`,
-                    background: PROGRESS_GRADIENT,
+                    background: `linear-gradient(90deg, ${track.color_one}, ${track.color_two})`,
                     borderRadius: 20,
                     transition: "width 400ms ease",
                     boxShadow: "0 0 8px rgba(29,185,84,0.3)",
