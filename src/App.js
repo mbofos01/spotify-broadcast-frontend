@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { FastAverageColor } from "fast-average-color";
 
@@ -9,18 +9,21 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [gradient, setGradient] = useState("linear-gradient(90deg, #1DB954, #1ed760)");
 
-  const fac = new FastAverageColor();
+  const fac = useMemo(() => new FastAverageColor(), []);
 
-  const extractColors = async (url) => {
-    try {
-      const color = await fac.getColorAsync(url,{algorithm: 'dominant'});
-      const darkened = color.rgb.replace("rgb", "rgba").replace(")", ",0.8)");
-      return `linear-gradient(90deg, ${color.hex}, ${darkened})`;
-    } catch (err) {
-      console.error("Color extraction error:", err);
-      return "linear-gradient(90deg, #1DB954, #1ed760)";
-    }
-  };
+  const extractColors = useCallback(
+    async (url) => {
+      try {
+        const color = await fac.getColorAsync(url, { algorithm: "dominant" });
+        const darkened = color.rgb.replace("rgb", "rgba").replace(")", ",0.8)");
+        return `linear-gradient(90deg, ${color.hex}, ${darkened})`;
+      } catch (err) {
+        console.error("Color extraction error:", err);
+        return "linear-gradient(90deg, #1DB954, #1ed760)";
+      }
+    },
+    [fac]
+  );
 
   useEffect(() => {
     const fetchTrack = async () => {
@@ -70,7 +73,7 @@ function App() {
 
     const interval = setInterval(fetchTrack, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [extractColors]);
 
   if (loading) {
     return (
