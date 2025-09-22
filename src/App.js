@@ -178,9 +178,9 @@ function App() {
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-      <div>
+      <div className="mb-2">
         {user && (
-          <div className="mb-4 text-center">
+          <div className="mb-4 mt-2 text-center">
             <img
               src={user.image}
               alt={user.display_name}
