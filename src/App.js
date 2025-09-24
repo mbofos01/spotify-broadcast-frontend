@@ -340,7 +340,9 @@ function App() {
           <img src={track.image_url} className="card-img-top" alt="Track Art" />
           <div className="card-body">
             <h5 className="card-title">{track.track}</h5>
-            <p className="card-text mb-1">{track.artist}</p>
+            {/* Multiple artists support */}
+            <p className="card-text mb-1">{track.artists.join(", ")}</p>
+
             <p className="card-text text-muted">{track.album}</p>
 
             {/* Progress bar with vibrant gradient */}
