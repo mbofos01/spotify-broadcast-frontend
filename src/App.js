@@ -74,7 +74,7 @@ function App() {
     const fetchTopArtists = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend.vercel.app/top-five-artists"
+          "https://spotify-broadcast-backend.vercel-rust.app/top-five-artists"
         );
         setTopArtists(res.data || []);
       } catch {
