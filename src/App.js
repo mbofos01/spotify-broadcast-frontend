@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { FastAverageColor } from "fast-average-color";
 import { motion, AnimatePresence } from "framer-motion";
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
