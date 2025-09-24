@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { FastAverageColor } from "fast-average-color";
+import { motion, AnimatePresence } from "framer-motion";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [track, setTrack] = useState(null);
@@ -11,6 +13,7 @@ function App() {
   const [gradient, setGradient] = useState(
     "linear-gradient(90deg, #1DB954, #1ed760)"
   );
+  const [activeTab, setActiveTab] = useState("tracks");
 
   const fac = useMemo(() => new FastAverageColor(), []);
 
@@ -73,7 +76,6 @@ function App() {
         const res = await axios.get(
           "https://spotify-broadcast-backend.vercel.app/top-five-artists"
         );
-        // backend returns array directly
         setTopArtists(res.data || []);
       } catch {
         setTopArtists([]);
@@ -147,112 +149,157 @@ function App() {
               <p>Followers: {user.followers}</p>
             </div>
           )}
-          <h4>Awfully quiet around here...</h4>
-          {/* --- TOP TRACKS --- */}
-          {topTracks.length > 0 && (
-            <div className="mt-4">
-              <h5>My recent Top 5 Tracks</h5>
-              <ul className="list-unstyled">
-                {topTracks.slice(0, 5).map((track) => (
-                  <li key={track.id} className="mb-3 d-flex align-items-center">
-                    <img
-                      src={
-                        track.album.images[1]?.url || track.album.images[0]?.url
-                      }
-                      alt={track.name}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: "8px",
-                        marginRight: 12,
-                      }}
-                    />
-                    <div>
-                      <a
-                        href={track.external_urls.spotify}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: "#1DB954",
-                          fontWeight: "bold",
-                          textDecoration: "none",
-                        }}
-                      >
-                        {track.name}
-                      </a>
-                      <div style={{ fontSize: "13px" }}>
-                        {track.artists.map((artist, i) => (
-                          <span key={artist.id}>
-                            <a
-                              href={artist.external_urls.spotify}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: "#fff", textDecoration: "none" }}
-                            >
-                              {artist.name}
-                            </a>
-                            {i < track.artists.length - 1 ? ", " : ""}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {/* <h4>Awfully quiet around here...</h4> */}
 
-          {/* --- TOP ARTISTS --- */}
-          {topArtists.length > 0 && (
-            <div className="mt-4">
-              <h5>My recent Top 5 Artists</h5>
-              <ul className="list-unstyled">
-                {topArtists.slice(0, 5).map((artist) => (
-                  <li
-                    key={artist.id}
-                    className="mb-3 d-flex align-items-center"
-                  >
-                    <img
-                      src={artist.image_url}
-                      alt={artist.name}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: "50%",
-                        marginRight: 12,
-                      }}
-                    />
-                    <div>
-                      <a
-                        href={artist.spotify_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+          {/* Tab buttons */}
+          <div className="d-flex justify-content-center my-3">
+            <button
+              onClick={() => setActiveTab("tracks")}
+              className={`btn me-2 ${
+                activeTab === "tracks" ? "btn-success" : "btn-outline-light"
+              }`}
+            >
+              Tracks
+            </button>
+            <button
+              onClick={() => setActiveTab("artists")}
+              className={`btn ${
+                activeTab === "artists" ? "btn-success" : "btn-outline-light"
+              }`}
+            >
+              Artists
+            </button>
+          </div>
+
+          {/* Animated Top Tracks / Artists */}
+          <AnimatePresence mode="wait">
+            {activeTab === "tracks" && (
+              <motion.div
+                key="tracks"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h5 className="text-center">My recent Top 5 Tracks</h5>
+                <ul className="list-unstyled">
+                  {topTracks.map((track) => (
+                    <li
+                      key={track.id}
+                      className="mb-3 d-flex align-items-center"
+                    >
+                      <img
+                        src={
+                          track.album.images[1]?.url ||
+                          track.album.images[0]?.url
+                        }
+                        alt={track.name}
                         style={{
-                          color: "#1DB954",
-                          fontWeight: "bold",
-                          textDecoration: "none",
+                          width: 50,
+                          height: 50,
+                          borderRadius: "8px",
+                          marginRight: 12,
                         }}
-                      >
-                        {artist.name}
-                      </a>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                      />
+                      <div>
+                        <a
+                          href={track.external_urls.spotify}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: "#1DB954",
+                            fontWeight: "bold",
+                            textDecoration: "none",
+                          }}
+                        >
+                          {track.name}
+                        </a>
+                        <div style={{ fontSize: "13px" }}>
+                          {track.artists.map((artist, i) => (
+                            <span key={artist.id}>
+                              <a
+                                href={artist.external_urls.spotify}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  color: "#fff",
+                                  textDecoration: "none",
+                                }}
+                              >
+                                {artist.name}
+                              </a>
+                              {i < track.artists.length - 1 ? ", " : ""}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+
+            {activeTab === "artists" && (
+              <motion.div
+                key="artists"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h5 className="text-center">My recent Top 5 Artists</h5>
+                <ul className="list-unstyled">
+                  {topArtists.map((artist) => (
+                    <li
+                      key={artist.id}
+                      className="mb-3 d-flex align-items-center"
+                    >
+                      <img
+                        src={artist.image_url}
+                        alt={artist.name}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: "50%",
+                          marginRight: 12,
+                        }}
+                      />
+                      <div>
+                        <a
+                          href={artist.spotify_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: "#1DB954",
+                            fontWeight: "bold",
+                            textDecoration: "none",
+                          }}
+                        >
+                          {artist.name}
+                        </a>
+
+                        <div style={{ fontSize: "13px" }}>
+                          Followers: {artist.followers.toLocaleString()}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     );
   }
 
+  // Currently playing track view
   const progress_ms = track.progress_ms || 0;
   const duration_ms = track.duration_ms || 1;
   const formatTime = (ms) =>
     `${Math.floor(ms / 60000)}:${String(
       Math.floor((ms % 60000) / 1000)
     ).padStart(2, "0")}`;
-
   const elapsedTime = formatTime(progress_ms);
   const totalTime = formatTime(duration_ms);
 
@@ -285,6 +332,7 @@ function App() {
             <p>Followers: {user.followers}</p>
           </div>
         )}
+
         <div
           className="card text-center bg-secondary"
           style={{ width: "20rem" }}
