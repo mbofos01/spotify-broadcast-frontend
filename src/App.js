@@ -174,7 +174,7 @@ function App() {
           )}
 
           {/* Tab buttons */}
-          <div className="d-flex justify-content-center my-3">
+          <div className="d-flex justify-content-center my-3 mb-3">
             <button
               onClick={() => setActiveTab("tracks")}
               className={`btn me-2 ${
@@ -211,7 +211,7 @@ function App() {
                 exit={{ opacity: 0, x: 30 }}
                 transition={{ duration: 0.3 }}
               >
-                <h5 className="text-center">My recent Top 5 Tracks</h5>
+                <h5 className="text-center mt-3 mb-3">My recent Top 5 Tracks</h5>
                 <ul className="list-unstyled">
                   {topTracks.map((track) => (
                     <li
@@ -279,7 +279,7 @@ function App() {
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.3 }}
               >
-                <h5 className="text-center">My recent Top 5 Artists</h5>
+                <h5 className="text-center mt-3 mb-3">My recent Top 5 Artists</h5>
                 <ul className="list-unstyled">
                   {topArtists.map((artist) => (
                     <li
@@ -328,7 +328,7 @@ function App() {
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.3 }}
               >
-                <h5 className="text-center">My Last Played Tracks</h5>
+                <h5 className="text-center mt-3 mb-3">My Last Played Tracks</h5>
                 <ul className="list-unstyled">
                   {recentlyPlayed.map((item) => (
                     <li
