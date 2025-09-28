@@ -2,8 +2,8 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { FastAverageColor } from "fast-average-color";
 import { motion, AnimatePresence } from "framer-motion";
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
+  const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [gradient, setGradient] = useState(
     "linear-gradient(90deg, #1DB954, #1ed760)"
@@ -84,12 +85,24 @@ function App() {
       }
     };
 
+    const fetchRecentlyPlayed = async () => {
+      try {
+        const res = await axios.get(
+          "https://spotify-broadcast-backend.vercel.app/recently-played"
+        );
+        setRecentlyPlayed(res.data || []);
+      } catch {
+        setRecentlyPlayed([]);
+      }
+    };
+
     const init = async () => {
       await Promise.all([
         fetchUser(),
         fetchTrack(),
         fetchTopTracks(),
         fetchTopArtists(),
+        fetchRecentlyPlayed(),
       ]);
       setLoading(false);
     };
@@ -165,11 +178,19 @@ function App() {
             </button>
             <button
               onClick={() => setActiveTab("artists")}
-              className={`btn ${
+              className={`btn me-2 ${
                 activeTab === "artists" ? "btn-success" : "btn-outline-light"
               }`}
             >
               Artists
+            </button>
+            <button
+              onClick={() => setActiveTab("recent")}
+              className={`btn ${
+                activeTab === "recent" ? "btn-success" : "btn-outline-light"
+              }`}
+            >
+              Recently Played
             </button>
           </div>
 
@@ -282,6 +303,54 @@ function App() {
 
                         <div style={{ fontSize: "13px" }}>
                           Followers: {artist.followers.toLocaleString()}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+
+            {activeTab === "recent" && (
+              <motion.div
+                key="recent"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h5 className="text-center">My Last Played Tracks</h5>
+                <ul className="list-unstyled">
+                  {recentlyPlayed.map((item) => (
+                    <li
+                      key={item.track_id}
+                      className="mb-3 d-flex align-items-center"
+                    >
+                      <img
+                        src={item.image_url}
+                        alt={item.track}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: "8px",
+                          marginRight: 12,
+                        }}
+                      />
+                      <div>
+                        <a
+                          href={item.spotify_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: "#1DB954",
+                            fontWeight: "bold",
+                            textDecoration: "none",
+                          }}
+                        >
+                          {item.name}
+                        </a>
+                        <div style={{ fontSize: "13px" }}>
+                          {item.artists.join(", ")}
                         </div>
                       </div>
                     </li>
