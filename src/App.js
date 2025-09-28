@@ -108,7 +108,10 @@ function App() {
     };
     init();
 
-    const interval = setInterval(fetchTrack, 5000);
+    const interval = setInterval(() => {
+      fetchTrack();
+      fetchRecentlyPlayed(); 
+    }, 5000);
     return () => clearInterval(interval);
   }, [extractColors]);
 
