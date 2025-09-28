@@ -9,6 +9,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
+  const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [gradient, setGradient] = useState(
     "linear-gradient(90deg, #1DB954, #1ed760)"
@@ -16,6 +17,12 @@ function App() {
   const [activeTab, setActiveTab] = useState("tracks");
 
   const fac = useMemo(() => new FastAverageColor(), []);
+
+  // Helper to truncate long names
+  const truncateName = (name, maxLength = 25) => {
+    if (!name) return "";
+    return name.length > maxLength ? name.slice(0, maxLength) + "…" : name;
+  };
 
   const extractColors = useCallback(
     async (url) => {
@@ -82,18 +89,33 @@ function App() {
       }
     };
 
+    const fetchRecentlyPlayed = async () => {
+      try {
+        const res = await axios.get(
+          "https://spotify-broadcast-backend.vercel.app/recently-played?limit=5"
+        );
+        setRecentlyPlayed(res.data || []);
+      } catch {
+        setRecentlyPlayed([]);
+      }
+    };
+
     const init = async () => {
       await Promise.all([
         fetchUser(),
         fetchTrack(),
         fetchTopTracks(),
         fetchTopArtists(),
+        fetchRecentlyPlayed(),
       ]);
       setLoading(false);
     };
     init();
 
-    const interval = setInterval(fetchTrack, 5000);
+    const interval = setInterval(() => {
+      fetchTrack();
+      fetchRecentlyPlayed();
+    }, 5000);
     return () => clearInterval(interval);
   }, [extractColors]);
 
@@ -142,17 +164,17 @@ function App() {
                     fontWeight: "bold",
                     textDecoration: "none",
                   }}
+                  title={user.display_name}
                 >
-                  {user.display_name}
+                  {truncateName(user.display_name, 20)}
                 </a>
               </h4>
               <p>Followers: {user.followers}</p>
             </div>
           )}
-          {/* <h4>Awfully quiet around here...</h4> */}
 
           {/* Tab buttons */}
-          <div className="d-flex justify-content-center my-3">
+          <div className="d-flex justify-content-center my-3 mb-3">
             <button
               onClick={() => setActiveTab("tracks")}
               className={`btn me-2 ${
@@ -163,11 +185,19 @@ function App() {
             </button>
             <button
               onClick={() => setActiveTab("artists")}
-              className={`btn ${
+              className={`btn me-2 ${
                 activeTab === "artists" ? "btn-success" : "btn-outline-light"
               }`}
             >
               Artists
+            </button>
+            <button
+              onClick={() => setActiveTab("recent")}
+              className={`btn ${
+                activeTab === "recent" ? "btn-success" : "btn-outline-light"
+              }`}
+            >
+              Recently Played
             </button>
           </div>
 
@@ -181,7 +211,7 @@ function App() {
                 exit={{ opacity: 0, x: 30 }}
                 transition={{ duration: 0.3 }}
               >
-                <h5 className="text-center">My recent Top 5 Tracks</h5>
+                <h5 className="text-center mt-3 mb-3">My recent Top 5 Tracks</h5>
                 <ul className="list-unstyled">
                   {topTracks.map((track) => (
                     <li
@@ -206,13 +236,14 @@ function App() {
                           href={track.external_urls.spotify}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={track.name}
                           style={{
                             color: "#1DB954",
                             fontWeight: "bold",
                             textDecoration: "none",
                           }}
                         >
-                          {track.name}
+                          {truncateName(track.name, 30)}
                         </a>
                         <div style={{ fontSize: "13px" }}>
                           {track.artists.map((artist, i) => (
@@ -221,12 +252,13 @@ function App() {
                                 href={artist.external_urls.spotify}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                title={artist.name}
                                 style={{
                                   color: "#fff",
                                   textDecoration: "none",
                                 }}
                               >
-                                {artist.name}
+                                {truncateName(artist.name, 25)}
                               </a>
                               {i < track.artists.length - 1 ? ", " : ""}
                             </span>
@@ -247,7 +279,7 @@ function App() {
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.3 }}
               >
-                <h5 className="text-center">My recent Top 5 Artists</h5>
+                <h5 className="text-center mt-3 mb-3">My recent Top 5 Artists</h5>
                 <ul className="list-unstyled">
                   {topArtists.map((artist) => (
                     <li
@@ -269,17 +301,69 @@ function App() {
                           href={artist.spotify_url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={artist.name}
                           style={{
                             color: "#1DB954",
                             fontWeight: "bold",
                             textDecoration: "none",
                           }}
                         >
-                          {artist.name}
+                          {truncateName(artist.name, 25)}
                         </a>
-
                         <div style={{ fontSize: "13px" }}>
                           Followers: {artist.followers.toLocaleString()}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+
+            {activeTab === "recent" && (
+              <motion.div
+                key="recent"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h5 className="text-center mt-3 mb-3">My Last Played Tracks</h5>
+                <ul className="list-unstyled">
+                  {recentlyPlayed.map((item) => (
+                    <li
+                      key={item.track_id}
+                      className="mb-3 d-flex align-items-center"
+                    >
+                      <img
+                        src={item.image_url}
+                        alt={item.track}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: "8px",
+                          marginRight: 12,
+                        }}
+                      />
+                      <div>
+                        <a
+                          href={item.spotify_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={item.name}
+                          style={{
+                            color: "#1DB954",
+                            fontWeight: "bold",
+                            textDecoration: "none",
+                          }}
+                        >
+                          {truncateName(item.name, 20)}
+                        </a>
+                        <div style={{ fontSize: "13px" }}>
+                          {truncateName(
+                            item.artists.map((artist) => artist).join(", "),
+                            30
+                          )}
                         </div>
                       </div>
                     </li>
@@ -320,6 +404,7 @@ function App() {
                   .pop()}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                title={user.display_name}
                 style={{
                   color: "#1DB954",
                   fontWeight: "bold",
@@ -340,12 +425,12 @@ function App() {
           <img src={track.image_url} className="card-img-top" alt="Track Art" />
           <div className="card-body">
             <h5 className="card-title">{track.track}</h5>
-            {/* Multiple artists support */}
-            <p className="card-text mb-1">{track.artists.join(", ")}</p>
-
+            <p className="card-text mb-1">
+              {track.artists.map((artist) => artist).join(", ")}
+            </p>
             <p className="card-text text-muted">{track.album}</p>
 
-            {/* Progress bar with vibrant gradient */}
+            {/* Progress bar */}
             <div style={{ margin: "1rem 0" }}>
               <div
                 style={{
@@ -370,7 +455,6 @@ function App() {
               </div>
             </div>
 
-            {/* Spotify Button */}
             {track.spotify_uri && (
               <a
                 href={track.spotify_uri}
