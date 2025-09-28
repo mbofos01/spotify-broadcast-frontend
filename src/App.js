@@ -92,7 +92,7 @@ function App() {
     const fetchRecentlyPlayed = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend.vercel.app/recently-played?limit=5"
+          "https://spotify-broadcast-backend-rust.vercel.app/recently-played?limit=5"
         );
         setRecentlyPlayed(res.data || []);
       } catch {
