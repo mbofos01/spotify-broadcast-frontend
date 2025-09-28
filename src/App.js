@@ -2,8 +2,6 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { FastAverageColor } from "fast-average-color";
 import { motion, AnimatePresence } from "framer-motion";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -19,6 +17,12 @@ function App() {
   const [activeTab, setActiveTab] = useState("tracks");
 
   const fac = useMemo(() => new FastAverageColor(), []);
+
+  // Helper to truncate long names
+  const truncateName = (name, maxLength = 25) => {
+    if (!name) return "";
+    return name.length > maxLength ? name.slice(0, maxLength) + "…" : name;
+  };
 
   const extractColors = useCallback(
     async (url) => {
@@ -88,7 +92,7 @@ function App() {
     const fetchRecentlyPlayed = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend.vercel.app/recently-played"
+          "https://spotify-broadcast-backend.vercel.app/recently-played?limit=5"
         );
         setRecentlyPlayed(res.data || []);
       } catch {
@@ -110,7 +114,7 @@ function App() {
 
     const interval = setInterval(() => {
       fetchTrack();
-      fetchRecentlyPlayed(); 
+      fetchRecentlyPlayed();
     }, 5000);
     return () => clearInterval(interval);
   }, [extractColors]);
@@ -160,14 +164,14 @@ function App() {
                     fontWeight: "bold",
                     textDecoration: "none",
                   }}
+                  title={user.display_name}
                 >
-                  {user.display_name}
+                  {truncateName(user.display_name, 20)}
                 </a>
               </h4>
               <p>Followers: {user.followers}</p>
             </div>
           )}
-          {/* <h4>Awfully quiet around here...</h4> */}
 
           {/* Tab buttons */}
           <div className="d-flex justify-content-center my-3">
@@ -232,13 +236,14 @@ function App() {
                           href={track.external_urls.spotify}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={track.name}
                           style={{
                             color: "#1DB954",
                             fontWeight: "bold",
                             textDecoration: "none",
                           }}
                         >
-                          {track.name}
+                          {truncateName(track.name, 30)}
                         </a>
                         <div style={{ fontSize: "13px" }}>
                           {track.artists.map((artist, i) => (
@@ -247,12 +252,13 @@ function App() {
                                 href={artist.external_urls.spotify}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                title={artist.name}
                                 style={{
                                   color: "#fff",
                                   textDecoration: "none",
                                 }}
                               >
-                                {artist.name}
+                                {truncateName(artist.name, 25)}
                               </a>
                               {i < track.artists.length - 1 ? ", " : ""}
                             </span>
@@ -295,15 +301,15 @@ function App() {
                           href={artist.spotify_url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={artist.name}
                           style={{
                             color: "#1DB954",
                             fontWeight: "bold",
                             textDecoration: "none",
                           }}
                         >
-                          {artist.name}
+                          {truncateName(artist.name, 25)}
                         </a>
-
                         <div style={{ fontSize: "13px" }}>
                           Followers: {artist.followers.toLocaleString()}
                         </div>
@@ -344,16 +350,20 @@ function App() {
                           href={item.spotify_url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title={item.name}
                           style={{
                             color: "#1DB954",
                             fontWeight: "bold",
                             textDecoration: "none",
                           }}
                         >
-                          {item.name}
+                          {truncateName(item.name, 20)}
                         </a>
                         <div style={{ fontSize: "13px" }}>
-                          {item.artists.join(", ")}
+                          {truncateName(
+                            item.artists.map((artist) => artist).join(", "),
+                            30
+                          )}
                         </div>
                       </div>
                     </li>
@@ -394,6 +404,7 @@ function App() {
                   .pop()}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                title={user.display_name}
                 style={{
                   color: "#1DB954",
                   fontWeight: "bold",
@@ -414,12 +425,12 @@ function App() {
           <img src={track.image_url} className="card-img-top" alt="Track Art" />
           <div className="card-body">
             <h5 className="card-title">{track.track}</h5>
-            {/* Multiple artists support */}
-            <p className="card-text mb-1">{track.artists.join(", ")}</p>
-
+            <p className="card-text mb-1">
+              {track.artists.map((artist) => artist).join(", ")}
+            </p>
             <p className="card-text text-muted">{track.album}</p>
 
-            {/* Progress bar with vibrant gradient */}
+            {/* Progress bar */}
             <div style={{ margin: "1rem 0" }}>
               <div
                 style={{
@@ -444,7 +455,6 @@ function App() {
               </div>
             </div>
 
-            {/* Spotify Button */}
             {track.spotify_uri && (
               <a
                 href={track.spotify_uri}
