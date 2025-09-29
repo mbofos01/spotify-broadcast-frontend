@@ -6,7 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
 
 function NothingPlayingCard() {
-  const messages = [
+  const randomMessage = useMemo(() => {
+    const messages = [
     "Silence is golden — nothing playing right now 🎧✨",
     "The DJ (me) is on a break 🛑🎶",
     "No jams at the moment — stay tuned! 📻",
@@ -27,13 +28,9 @@ function NothingPlayingCard() {
     "The silence is curated just for you 🎶🪄",
     "No music, no problem 😉",
     "Currently offline from beats 🔌🎵",
-  ];
-
-  // Pick a random one once per reload
-  const randomMessage = useMemo(
-    () => messages[Math.floor(Math.random() * messages.length)],
-    []
-  );
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+  }, []);
 
   return (
     <div className="now-playing-glass center">
