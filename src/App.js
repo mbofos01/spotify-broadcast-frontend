@@ -8,26 +8,26 @@ import "./Widget.css";
 function NothingPlayingCard() {
   const randomMessage = useMemo(() => {
     const messages = [
-    "Silence is golden — nothing playing right now 🎧✨",
-    "The DJ (me) is on a break 🛑🎶",
-    "No jams at the moment — stay tuned! 📻",
-    "Currently vibing… to silence 😌",
-    "Spotify says: taking five 🎵☕",
-    "Quiet mode: ON 🤫",
-    "My speakers are napping 💤🔊",
-    "Waiting for the next banger… ⏳🎶",
-    "Music loading… just kidding, nothing here 😅",
-    "Shhh… enjoying the quiet 🎶❌",
-    "No tracks queued — time for imagination 🎨🎵",
-    "Hit play and let’s dance! 💃🕺",
-    "Air guitar practice in progress 🎸🔥",
-    "Silence is my current playlist 🕶️🎵",
-    "I’m on a music detox 🍵🎶",
-    "Nothing playing… yet your future favorite song awaits 🎼✨",
-    "Streaming: pure tranquility 😌🎧",
-    "The silence is curated just for you 🎶🪄",
-    "No music, no problem 😉",
-    "Currently offline from beats 🔌🎵",
+      "Silence is golden — nothing playing right now 🎧✨",
+      "The DJ (me) is on a break 🛑🎶",
+      "No jams at the moment — stay tuned! 📻",
+      "Currently vibing… to silence 😌",
+      "Spotify says: taking five 🎵☕",
+      "Quiet mode: ON 🤫",
+      "My speakers are napping 💤🔊",
+      "Waiting for the next banger… ⏳🎶",
+      "Music loading… just kidding, nothing here 😅",
+      "Shhh… enjoying the quiet 🎶❌",
+      "No tracks queued — time for imagination 🎨🎵",
+      "Hit play and let’s dance! 💃🕺",
+      "Air guitar practice in progress 🎸🔥",
+      "Silence is my current playlist 🕶️🎵",
+      "I’m on a music detox 🍵🎶",
+      "Nothing playing… yet your future favorite song awaits 🎼✨",
+      "Streaming: pure tranquility 😌🎧",
+      "The silence is curated just for you 🎶🪄",
+      "No music, no problem 😉",
+      "Currently offline from beats 🔌🎵",
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   }, []);
@@ -193,7 +193,7 @@ function App() {
   if (!track || !track.track_id) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-        <div>
+        <div style={{ maxWidth: "18rem", width: "100%", padding: "0 1rem" }}>
           {user && (
             <div className="mb-4 text-center">
               <img
@@ -226,28 +226,31 @@ function App() {
           {/* Nothing playing -- end */}
 
           {/* Tab buttons */}
-          <div className="d-flex justify-content-center my-3 mb-3">
+          <div className="d-flex flex-column flex-sm-row justify-content-center my-3 mb-3 gap-2">
             <button
               onClick={() => setActiveTab("tracks")}
-              className={`btn me-2 ${
+              className={`btn ${
                 activeTab === "tracks" ? "btn-success" : "btn-outline-light"
               }`}
+              style={{ minWidth: "140px" }}
             >
               Tracks
             </button>
             <button
               onClick={() => setActiveTab("artists")}
-              className={`btn me-2 ${
+              className={`btn ${
                 activeTab === "artists" ? "btn-success" : "btn-outline-light"
               }`}
+              style={{ minWidth: "140px" }}
             >
               Artists
             </button>
             <button
               onClick={() => setActiveTab("recent")}
-              className={`btn me-2 ${
+              className={`btn ${
                 activeTab === "recent" ? "btn-success" : "btn-outline-light"
               }`}
+              style={{ minWidth: "140px" }}
             >
               Recently Played
             </button>
@@ -256,6 +259,7 @@ function App() {
               className={`btn ${
                 activeTab === "playlists" ? "btn-success" : "btn-outline-light"
               }`}
+              style={{ minWidth: "140px" }}
             >
               Playlists
             </button>
@@ -270,6 +274,7 @@ function App() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 30 }}
                 transition={{ duration: 0.3 }}
+                style={{ maxWidth: "500px", margin: "0 auto" }}
               >
                 <h5 className="text-center mt-3 mb-3">
                   My recent Top 5 Tracks
@@ -340,6 +345,7 @@ function App() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.3 }}
+                style={{ maxWidth: "500px", margin: "0 auto" }}
               >
                 <h5 className="text-center mt-3 mb-3">
                   My recent Top 5 Artists
@@ -391,6 +397,7 @@ function App() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.3 }}
+                style={{ maxWidth: "500px", margin: "0 auto" }}
               >
                 <h5 className="text-center mt-3 mb-3">My Last Played Tracks</h5>
                 <ul className="list-unstyled">
@@ -443,6 +450,7 @@ function App() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.3 }}
+                style={{ maxWidth: "500px", margin: "0 auto" }}
               >
                 <h5 className="text-center mt-3 mb-3">My Playlists</h5>
                 <ul className="list-unstyled">
@@ -462,7 +470,13 @@ function App() {
                         }}
                       />
                       <div style={{ flex: 1 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                          }}
+                        >
                           <a
                             href={playlist.spotify_url}
                             target="_blank"
@@ -477,15 +491,15 @@ function App() {
                             {truncateName(playlist.name, 25)}
                           </a>
                           {playlist.collaborative && (
-                            <span 
-                              title="Collaborative Playlist" 
-                              style={{ 
+                            <span
+                              title="Collaborative Playlist"
+                              style={{
                                 fontSize: "18px",
                                 background: "rgba(29, 185, 84, 0.2)",
                                 padding: "2px 6px",
                                 borderRadius: "4px",
                                 display: "inline-flex",
-                                alignItems: "center"
+                                alignItems: "center",
                               }}
                             >
                               👥
@@ -493,12 +507,19 @@ function App() {
                           )}
                         </div>
                         {playlist.description && (
-                          <div style={{ fontSize: "12px", color: "#999", marginTop: "2px" }}>
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              color: "#999",
+                              marginTop: "2px",
+                            }}
+                          >
                             {truncateName(playlist.description, 40)}
                           </div>
                         )}
                         <div style={{ fontSize: "13px", marginTop: "2px" }}>
-                          {playlist.tracks_total.toLocaleString()} tracks • {playlist.owner}
+                          {playlist.tracks_total.toLocaleString()} tracks •{" "}
+                          {playlist.owner}
                         </div>
                       </div>
                     </li>
