@@ -46,6 +46,7 @@ function App() {
   const [topTracks, setTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [gradient, setGradient] = useState(
     "linear-gradient(90deg, #1DB954, #1ed760)"
@@ -136,6 +137,17 @@ function App() {
       }
     };
 
+    const fetchPlaylists = async () => {
+      try {
+        const res = await axios.get(
+          "https://spotify-broadcast-backend.vercel.app/my-playlists"
+        );
+        setPlaylists(res.data || []);
+      } catch {
+        setPlaylists([]);
+      }
+    };
+
     const init = async () => {
       await Promise.all([
         fetchUser(),
@@ -143,6 +155,7 @@ function App() {
         fetchTopTracks(),
         fetchTopArtists(),
         fetchRecentlyPlayed(),
+        fetchPlaylists(),
       ]);
       setLoading(false);
     };
@@ -232,11 +245,19 @@ function App() {
             </button>
             <button
               onClick={() => setActiveTab("recent")}
-              className={`btn ${
+              className={`btn me-2 ${
                 activeTab === "recent" ? "btn-success" : "btn-outline-light"
               }`}
             >
               Recently Played
+            </button>
+            <button
+              onClick={() => setActiveTab("playlists")}
+              className={`btn ${
+                activeTab === "playlists" ? "btn-success" : "btn-outline-light"
+              }`}
+            >
+              Playlists
             </button>
           </div>
 
@@ -407,6 +428,77 @@ function App() {
                             item.artists.map((artist) => artist).join(", "),
                             30
                           )}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+
+            {activeTab === "playlists" && (
+              <motion.div
+                key="playlists"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h5 className="text-center mt-3 mb-3">My Playlists</h5>
+                <ul className="list-unstyled">
+                  {playlists.map((playlist) => (
+                    <li
+                      key={playlist.id}
+                      className="mb-3 d-flex align-items-center"
+                    >
+                      <img
+                        src={playlist.image_url}
+                        alt={playlist.name}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: "8px",
+                          marginRight: 12,
+                        }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          <a
+                            href={playlist.spotify_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={playlist.name}
+                            style={{
+                              color: "#1DB954",
+                              fontWeight: "bold",
+                              textDecoration: "none",
+                            }}
+                          >
+                            {truncateName(playlist.name, 25)}
+                          </a>
+                          {playlist.collaborative && (
+                            <span 
+                              title="Collaborative Playlist" 
+                              style={{ 
+                                fontSize: "18px",
+                                background: "rgba(29, 185, 84, 0.2)",
+                                padding: "2px 6px",
+                                borderRadius: "4px",
+                                display: "inline-flex",
+                                alignItems: "center"
+                              }}
+                            >
+                              👥
+                            </span>
+                          )}
+                        </div>
+                        {playlist.description && (
+                          <div style={{ fontSize: "12px", color: "#999", marginTop: "2px" }}>
+                            {truncateName(playlist.description, 40)}
+                          </div>
+                        )}
+                        <div style={{ fontSize: "13px", marginTop: "2px" }}>
+                          {playlist.tracks_total.toLocaleString()} tracks • {playlist.owner}
                         </div>
                       </div>
                     </li>
