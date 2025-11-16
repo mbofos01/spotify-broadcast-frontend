@@ -140,7 +140,7 @@ function App() {
     const fetchPlaylists = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend.vercel.app/my-playlists"
+          "https://spotify-broadcast-backend-rust.vercel.app/my-playlists"
         );
         setPlaylists(res.data || []);
       } catch {
