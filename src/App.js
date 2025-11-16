@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 function NothingPlayingCard() {
   const randomMessage = useMemo(() => {
     const messages = [
@@ -79,7 +81,7 @@ function App() {
     const fetchTrack = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend-rust.vercel.app/currently-playing-verbose"
+          `${BACKEND_URL}/currently-playing-verbose`
         );
         const trackData = res.data;
         setTrack(trackData);
@@ -96,7 +98,7 @@ function App() {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend-rust.vercel.app/user-info"
+          `${BACKEND_URL}/user-info`
         );
         setUser(res.data);
       } catch {
@@ -107,7 +109,7 @@ function App() {
     const fetchTopTracks = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend-rust.vercel.app/top-five"
+          `${BACKEND_URL}/top-five`
         );
         setTopTracks(res.data.top_tracks || []);
       } catch {
@@ -118,7 +120,7 @@ function App() {
     const fetchTopArtists = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend-rust.vercel.app/top-five-artists"
+          `${BACKEND_URL}/top-five-artists`
         );
         setTopArtists(res.data || []);
       } catch {
@@ -129,7 +131,7 @@ function App() {
     const fetchRecentlyPlayed = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend-rust.vercel.app/recently-played?limit=5"
+          `${BACKEND_URL}/recently-played?limit=5`
         );
         setRecentlyPlayed(res.data || []);
       } catch {
@@ -140,7 +142,7 @@ function App() {
     const fetchPlaylists = async () => {
       try {
         const res = await axios.get(
-          "https://spotify-broadcast-backend-rust.vercel.app/my-playlists"
+          `${BACKEND_URL}/my-playlists`
         );
         setPlaylists(res.data || []);
       } catch {
