@@ -5,7 +5,7 @@ function NextInQueue({ track }) {
   if (!track) return null;
 
   return (
-    <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+    <div style={{ marginBottom: "2rem" }}>
       <h5 className="text-center mb-3">Next in Queue</h5>
       <div
         className="d-flex align-items-center"

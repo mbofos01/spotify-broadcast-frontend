@@ -16,7 +16,7 @@ import TopArtistsTab from "./components/TopArtistsTab";
 import RecentlyPlayedTab from "./components/RecentlyPlayedTab";
 import PlaylistsTab from "./components/PlaylistsTab";
 import NextInQueue from "./components/NextInQueue";
-import { truncateName } from "./utils/helpers";
+// import { truncateName } from "./utils/helpers";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -183,52 +183,9 @@ function App() {
           </div>
 
           {/* Info Tab */}
-          <div className="col-12 col-lg-4">
-            <div id="info-tab">
-              <h5 className="text-center mt-3 mb-3">My Last Played Tracks</h5>
-              <ul className="list-unstyled">
-                {recentlyPlayed.map((item) => (
-                  <li
-                    key={item.track_id}
-                    className="mb-3 d-flex align-items-center"
-                  >
-                    <img
-                      src={item.image_url}
-                      alt={item.track}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: "8px",
-                        marginRight: 12,
-                      }}
-                    />
-                    <div>
-                      <a
-                        href={item.spotify_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={item.name}
-                        style={{
-                          color: "#1DB954",
-                          fontWeight: "bold",
-                          textDecoration: "none",
-                        }}
-                      >
-                        {truncateName(item.name, 20)}
-                      </a>
-                      <div style={{ fontSize: "13px" }}>
-                        {truncateName(
-                          item.artists.map((artist) => artist).join(", "),
-                          30
-                        )}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
+          <div className="col-12 col-lg-4" id="info-tab">
               <NextInQueue track={nextInQueue} />
-            </div>
+              <RecentlyPlayedTab tracks={recentlyPlayed} />
           </div>
         </div>
       </div>
