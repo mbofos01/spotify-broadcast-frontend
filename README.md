@@ -1,70 +1,137 @@
-# Getting Started with Create React App
+# Spotify Broadcast Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time Spotify activity dashboard that displays your currently playing track, listening history, top tracks, top artists, and playlists. Built with React and connected to a Spotify API backend.
+
+> **Backend Repository**: This project requires the [Spotify Broadcast Backend](https://github.com/mbofos01/spotify-broadcast-backend) to function. Make sure to set it up first.
+
+## Features
+
+- 🎵 **Real-time Now Playing** - See what's currently playing with album art and progress bar
+- 🔄 **Auto-refresh** - Updates every 5 seconds for live tracking
+- 📊 **Top Tracks & Artists** - View your recent top 5 tracks and artists
+- 🎧 **Recently Played** - See your last 5 played tracks
+- 📋 **Playlists** - Browse all your Spotify playlists
+- ⏭️ **Next in Queue** - Preview what's coming up next
+- 🎨 **Dynamic Theming** - Progress bar gradient adapts to album artwork colors
+- 💾 **Smart Caching** - localStorage caching for faster load times
+- 🖼️ **Dynamic Favicon** - Browser tab icon shows your Spotify profile picture
+
+## Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- A running Spotify Broadcast Backend instance
+
+## Environment Setup
+
+Create a `.env` file in the root directory:
+
+```env
+REACT_APP_BACKEND_URL=http://localhost:5000
+```
+
+Replace `http://localhost:5000` with your backend URL if deployed elsewhere.
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/spotify-broadcast-frontend.git
+cd spotify-broadcast-frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create your `.env` file (see Environment Setup above)
+
+4. Start the development server:
+```bash
+npm start
+```
+
+The app will open at [http://localhost:3000](http://localhost:3000)
+
+## Caching Strategy
+
+The app uses localStorage to cache data with different expiration times:
+
+- **User Info**: 24 hours
+- **Top Tracks**: 1 hour
+- **Top Artists**: 1 hour
+- **Playlists**: 30 minutes
+- **Currently Playing**: Real-time (no cache)
+- **Recently Played**: Real-time (no cache)
+- **Next in Queue**: Real-time (no cache)
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The page will reload when you make changes.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in interactive watch mode.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `build` folder.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The build is optimized for best performance with minified code and hashed filenames.
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Note: this is a one-way operation!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Ejects from Create React App to give you full control over configuration files.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Dependencies
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **React** - UI framework
+- **Axios** - HTTP client for API calls
+- **Framer Motion** - Animation library for smooth transitions
+- **Bootstrap** - CSS framework for responsive design
+- **fast-average-color** - Extract dominant colors from images
 
-## Learn More
+## Backend Requirements
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This frontend requires a backend API with the following endpoints:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> **Get the backend**: [Spotify Broadcast Backend Repository](https://spotify-broadcast-backend.vercel.app/redoc)
 
-### Code Splitting
+- `GET /user-info` - User profile information
+- `GET /currently-playing-verbose` - Current track details
+- `GET /top-five` - Top 5 tracks
+- `GET /top-five-artists` - Top 5 artists
+- `GET /recently-played?limit=5` - Recently played tracks
+- `GET /my-playlists` - User's playlists
+- `GET /next-in-queue` - Next track in queue
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Browser Support
 
-### Analyzing the Bundle Size
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing
 
-### Making a Progressive Web App
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
+This project is licensed under the MIT License.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Acknowledgments
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Spotify Web API
+- All open-source libraries used in this project
