@@ -149,7 +149,12 @@ function App() {
     } else {
       document.title = "Spotify Broadcast";
     }
-  }, [user]);
+
+    // Update favicon with rounded user profile picture
+    if (user?.image) {
+      createRoundedFavicon(user.image);
+    }
+  }, [user, createRoundedFavicon]);
 
   if (loading) {
     return <LoadingSpinner />;
