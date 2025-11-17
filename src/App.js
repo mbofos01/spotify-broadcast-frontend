@@ -142,6 +142,15 @@ function App() {
     return () => clearInterval(interval);
   }, [extractColors]);
 
+  // Update document title with username
+  useEffect(() => {
+    if (user?.display_name) {
+      document.title = `${user.display_name}'s Spotify`;
+    } else {
+      document.title = "Spotify Broadcast";
+    }
+  }, [user]);
+
   if (loading) {
     return <LoadingSpinner />;
   }
