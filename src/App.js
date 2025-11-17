@@ -16,7 +16,7 @@ import TopArtistsTab from "./components/TopArtistsTab";
 import RecentlyPlayedTab from "./components/RecentlyPlayedTab";
 import PlaylistsTab from "./components/PlaylistsTab";
 import NextInQueue from "./components/NextInQueue";
-// import { truncateName } from "./utils/helpers";
+import { cache, CACHE_KEYS, CACHE_DURATIONS } from "./utils/cache";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -35,6 +35,38 @@ function App() {
   const [activeTab, setActiveTab] = useState("tracks");
 
   const fac = useMemo(() => new FastAverageColor(), []);
+
+  // Function to create rounded favicon
+  const createRoundedFavicon = useCallback((imageUrl) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const size = 64;
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // Draw circle clip path
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.clip();
+      
+      // Draw image
+      ctx.drawImage(img, 0, 0, size, size);
+      
+      // Update favicon
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = canvas.toDataURL();
+    };
+    img.src = imageUrl;
+  }, []);
 
   const extractColors = useCallback(
     async (url) => {
@@ -67,27 +99,50 @@ function App() {
     };
 
     const fetchUser = async () => {
+      const cached = cache.get(CACHE_KEYS.USER);
+      if (cached) {
+        setUser(cached);
+        return;
+      }
+
       try {
         const res = await axios.get(`${BACKEND_URL}/user-info`);
         setUser(res.data);
+        cache.set(CACHE_KEYS.USER, res.data, CACHE_DURATIONS.user);
       } catch {
         setUser(null);
       }
     };
 
     const fetchTopTracks = async () => {
+      const cached = cache.get(CACHE_KEYS.TOP_TRACKS);
+      if (cached) {
+        setTopTracks(cached);
+        return;
+      }
+
       try {
         const res = await axios.get(`${BACKEND_URL}/top-five`);
-        setTopTracks(res.data.top_tracks || []);
+        const tracks = res.data.top_tracks || [];
+        setTopTracks(tracks);
+        cache.set(CACHE_KEYS.TOP_TRACKS, tracks, CACHE_DURATIONS.topTracks);
       } catch {
         setTopTracks([]);
       }
     };
 
     const fetchTopArtists = async () => {
+      const cached = cache.get(CACHE_KEYS.TOP_ARTISTS);
+      if (cached) {
+        setTopArtists(cached);
+        return;
+      }
+
       try {
         const res = await axios.get(`${BACKEND_URL}/top-five-artists`);
-        setTopArtists(res.data || []);
+        const artists = res.data || [];
+        setTopArtists(artists);
+        cache.set(CACHE_KEYS.TOP_ARTISTS, artists, CACHE_DURATIONS.topArtists);
       } catch {
         setTopArtists([]);
       }
@@ -103,9 +158,17 @@ function App() {
     };
 
     const fetchPlaylists = async () => {
+      const cached = cache.get(CACHE_KEYS.PLAYLISTS);
+      if (cached) {
+        setPlaylists(cached);
+        return;
+      }
+
       try {
         const res = await axios.get(`${BACKEND_URL}/my-playlists`);
-        setPlaylists(res.data || []);
+        const playlists = res.data || [];
+        setPlaylists(playlists);
+        cache.set(CACHE_KEYS.PLAYLISTS, playlists, CACHE_DURATIONS.playlists);
       } catch {
         setPlaylists([]);
       }
