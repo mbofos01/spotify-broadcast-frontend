@@ -149,18 +149,31 @@ function App() {
   if (!track || !track.track_id) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-        <div style={{ maxWidth: "18rem", width: "100%", padding: "0 1rem" }}>
+        <div
+          className="container"
+          style={{ maxWidth: "1200px", padding: "0 1rem" }}
+        >
           <UserProfile user={user} />
-          <NothingPlayingCard />
-          <div id="info-tab">
-            <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <AnimatePresence mode="wait">
-              {activeTab === "tracks" && <TopTracksTab tracks={topTracks} />}
-              {activeTab === "artists" && <TopArtistsTab artists={topArtists} />}
-              {activeTab === "recent" && <RecentlyPlayedTab tracks={recentlyPlayed} />}
-              {activeTab === "playlists" && <PlaylistsTab playlists={playlists} />}
-            </AnimatePresence>
+          <div className="row g-4">
+            {/* Nothing Playing Card */}
+            <div className="col-12 col-lg-12">
+              <div style={{ maxWidth: "24rem", margin: "0 auto" }}>
+                <NothingPlayingCard />
+              </div>
+            </div>
+
+            {/* Info Tab with Tabs */}
+            <div className="col-12 col-lg-12" id="info-tab">
+              <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+
+              <AnimatePresence mode="wait">
+                {activeTab === "tracks" && <TopTracksTab tracks={topTracks} />}
+                {activeTab === "artists" && <TopArtistsTab artists={topArtists} />}
+                {activeTab === "recent" && <RecentlyPlayedTab tracks={recentlyPlayed} />}
+                {activeTab === "playlists" && <PlaylistsTab playlists={playlists} />}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
