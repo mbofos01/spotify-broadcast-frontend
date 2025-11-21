@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 // Components
 import LoadingSpinner from "./components/LoadingSpinner";
 import UserProfile from "./components/UserProfile";
@@ -267,6 +268,7 @@ function App() {
           </div>
         </div>
         <Analytics />
+        <SpeedInsights />
       </>
     );
   }
@@ -296,6 +298,7 @@ function App() {
         </div>
       </div>
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }
