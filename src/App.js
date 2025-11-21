@@ -4,7 +4,7 @@ import { FastAverageColor } from "fast-average-color";
 import { AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 // Components
 import LoadingSpinner from "./components/LoadingSpinner";
 import UserProfile from "./components/UserProfile";
@@ -41,26 +41,26 @@ function App() {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = () => {
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       const size = 64;
       canvas.width = size;
       canvas.height = size;
-      const ctx = canvas.getContext('2d');
-      
+      const ctx = canvas.getContext("2d");
+
       // Draw circle clip path
       ctx.beginPath();
       ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
       ctx.closePath();
       ctx.clip();
-      
+
       // Draw image
       ctx.drawImage(img, 0, 0, size, size);
-      
+
       // Update favicon
       let link = document.querySelector("link[rel~='icon']");
       if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
+        link = document.createElement("link");
+        link.rel = "icon";
         document.head.appendChild(link);
       }
       link.href = canvas.toDataURL();
@@ -225,61 +225,78 @@ function App() {
 
   if (!track || !track.track_id) {
     return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-        <div
-          className="container"
-          style={{ maxWidth: "1200px", padding: "0 1rem" }}
-        >
-          <UserProfile user={user} />
+      <>
+        <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
+          <div
+            className="container"
+            style={{ maxWidth: "1200px", padding: "0 1rem" }}
+          >
+            <UserProfile user={user} />
 
-          <div className="row g-4">
-            {/* Nothing Playing Card */}
-            <div className="col-12 col-lg-12">
-              <div style={{ maxWidth: "24rem", margin: "0 auto" }}>
-                <NothingPlayingCard />
+            <div className="row g-4">
+              {/* Nothing Playing Card */}
+              <div className="col-12 col-lg-12">
+                <div style={{ maxWidth: "24rem", margin: "0 auto" }}>
+                  <NothingPlayingCard />
+                </div>
               </div>
-            </div>
 
-            {/* Info Tab with Tabs */}
-            <div className="col-12 col-lg-12" id="info-tab">
-              <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+              {/* Info Tab with Tabs */}
+              <div className="col-12 col-lg-12" id="info-tab">
+                <TabNavigation
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                />
 
-              <AnimatePresence mode="wait">
-                {activeTab === "tracks" && <TopTracksTab tracks={topTracks} />}
-                {activeTab === "artists" && <TopArtistsTab artists={topArtists} />}
-                {activeTab === "recent" && <RecentlyPlayedTab tracks={recentlyPlayed} />}
-                {activeTab === "playlists" && <PlaylistsTab playlists={playlists} />}
-              </AnimatePresence>
+                <AnimatePresence mode="wait">
+                  {activeTab === "tracks" && (
+                    <TopTracksTab tracks={topTracks} />
+                  )}
+                  {activeTab === "artists" && (
+                    <TopArtistsTab artists={topArtists} />
+                  )}
+                  {activeTab === "recent" && (
+                    <RecentlyPlayedTab tracks={recentlyPlayed} />
+                  )}
+                  {activeTab === "playlists" && (
+                    <PlaylistsTab playlists={playlists} />
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <Analytics />
+      </>
     );
   }
 
   // Currently playing track view
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-      <div
-        className="container"
-        style={{ maxWidth: "1200px", padding: "0 1rem" }}
-      >
-        <UserProfile user={user} maxNameLength={100} />
+    <>
+      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
+        <div
+          className="container"
+          style={{ maxWidth: "1200px", padding: "0 1rem" }}
+        >
+          <UserProfile user={user} maxNameLength={100} />
 
-        <div className="row g-4">
-          {/* Now Playing Tab */}
-          <div className="col-12 col-lg-8">
-            <NowPlayingCard track={track} gradient={gradient} />
-          </div>
+          <div className="row g-4">
+            {/* Now Playing Tab */}
+            <div className="col-12 col-lg-8">
+              <NowPlayingCard track={track} gradient={gradient} />
+            </div>
 
-          {/* Info Tab */}
-          <div className="col-12 col-lg-4" id="info-tab">
+            {/* Info Tab */}
+            <div className="col-12 col-lg-4" id="info-tab">
               <NextInQueue track={nextInQueue} />
               <RecentlyPlayedTab tracks={recentlyPlayed} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Analytics />
+    </>
   );
 }
 
