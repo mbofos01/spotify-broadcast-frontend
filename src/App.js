@@ -4,7 +4,7 @@ import { FastAverageColor } from "fast-average-color";
 import { AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
-
+import { Analytics } from "@vercel/analytics/react"
 // Components
 import LoadingSpinner from "./components/LoadingSpinner";
 import UserProfile from "./components/UserProfile";
