@@ -4,8 +4,7 @@ import { FastAverageColor } from "fast-average-color";
 import { AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react"
+
 // Components
 import LoadingSpinner from "./components/LoadingSpinner";
 import UserProfile from "./components/UserProfile";
@@ -17,6 +16,7 @@ import TopArtistsTab from "./components/TopArtistsTab";
 import RecentlyPlayedTab from "./components/RecentlyPlayedTab";
 import PlaylistsTab from "./components/PlaylistsTab";
 import NextInQueue from "./components/NextInQueue";
+import VercelAddOns from "./components/VercelAddOns";
 import { cache, CACHE_KEYS, CACHE_DURATIONS } from "./utils/cache";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -267,8 +267,7 @@ function App() {
             </div>
           </div>
         </div>
-        <Analytics />
-        <SpeedInsights />
+        <VercelAddOns />
       </>
     );
   }
@@ -297,8 +296,7 @@ function App() {
           </div>
         </div>
       </div>
-      <Analytics />
-      <SpeedInsights />
+      <VercelAddOns />
     </>
   );
 }
