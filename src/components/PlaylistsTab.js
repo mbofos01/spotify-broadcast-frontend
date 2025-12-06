@@ -12,7 +12,7 @@ function PlaylistsTab({ playlists }) {
       transition={{ duration: 0.3 }}
       style={{ maxWidth: "500px", margin: "0 auto" }}
     >
-      <h5 className="text-center mt-3 mb-3">My Public Playlists</h5>
+      <h5 className="text-center mt-3 mb-3">My Playlists</h5>
       <ul className="list-unstyled">
         {playlists.map((playlist) => (
           <li key={playlist.id} className="mb-3 d-flex align-items-center">
@@ -45,7 +45,7 @@ function PlaylistsTab({ playlists }) {
                     textDecoration: "none",
                   }}
                 >
-                  {truncateName(playlist.name, 25)}
+                  {truncateName(playlist.name, 30)}
                 </a>
                 {playlist.collaborative && (
                   <span

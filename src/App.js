@@ -16,6 +16,8 @@ import TopArtistsTab from "./components/TopArtistsTab";
 import RecentlyPlayedTab from "./components/RecentlyPlayedTab";
 import PlaylistsTab from "./components/PlaylistsTab";
 import NextInQueue from "./components/NextInQueue";
+import NowPlayingButton from "./components/NowPlayingButton";
+import MoreInfoButton from "./components/MoreInfoButton";
 import VercelAddOns from "./components/VercelAddOns";
 import { cache, CACHE_KEYS, CACHE_DURATIONS } from "./utils/cache";
 
@@ -34,6 +36,7 @@ function App() {
     "linear-gradient(90deg, #1DB954, #1ed760)"
   );
   const [activeTab, setActiveTab] = useState("tracks");
+  const [showNothingPlaying, setShowNothingPlaying] = useState(false);
 
   const fac = useMemo(() => new FastAverageColor(), []);
 
@@ -166,7 +169,7 @@ function App() {
       }
 
       try {
-        const res = await axios.get(`${BACKEND_URL}/my-playlists`);
+        const res = await axios.get(`${BACKEND_URL}/my-playlists?limit=5`);
         const playlists = res.data || [];
         setPlaylists(playlists);
         cache.set(CACHE_KEYS.PLAYLISTS, playlists, CACHE_DURATIONS.playlists);
@@ -224,7 +227,8 @@ function App() {
     return <LoadingSpinner />;
   }
 
-  if (!track || !track.track_id) {
+  // Force nothing playing view or actually nothing playing
+  if (showNothingPlaying || !track || !track.track_id) {
     return (
       <>
         <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
@@ -234,13 +238,23 @@ function App() {
           >
             <UserProfile user={user} />
 
+            {/* Toggle button - only show when music is actually playing */}
+            {track && track.track_id && (
+              <NowPlayingButton
+                showNothingPlaying={showNothingPlaying}
+                setShowNothingPlaying={setShowNothingPlaying}
+              />
+            )}
+
             <div className="row g-4">
-              {/* Nothing Playing Card */}
-              <div className="col-12 col-lg-12">
-                <div style={{ maxWidth: "24rem", margin: "0 auto" }}>
-                  <NothingPlayingCard />
+              {/* Conditionally show Nothing Playing Card only when actually nothing is playing */}
+              {!track || !track.track_id ? (
+                <div className="col-12 col-lg-12">
+                  <div style={{ maxWidth: "24rem", margin: "0 auto" }}>
+                    <NothingPlayingCard />
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
               {/* Info Tab with Tabs */}
               <div className="col-12 col-lg-12" id="info-tab">
@@ -281,6 +295,9 @@ function App() {
           style={{ maxWidth: "1200px", padding: "0 1rem" }}
         >
           <UserProfile user={user} maxNameLength={100} />
+
+          {/* Toggle button */}
+          <MoreInfoButton setShowNothingPlaying={setShowNothingPlaying} />
 
           <div className="row g-4">
             {/* Now Playing Tab */}

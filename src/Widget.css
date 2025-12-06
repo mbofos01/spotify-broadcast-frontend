@@ -24,3 +24,20 @@
   margin: auto;
   text-align: center;
 }
+
+.soundwave-btn {
+  animation: soundwave 1s ease-in-out infinite alternate;
+  background: #1DB954 !important;
+  border-color: #1DB954 !important;
+}
+
+@keyframes soundwave {
+  0% {
+    box-shadow: 0 0 5px #1DB954;
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 15px #1DB954, 0 0 25px rgba(29, 185, 84, 0.5);
+    transform: scale(1.02);
+  }
+}
