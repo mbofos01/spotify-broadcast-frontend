@@ -19,9 +19,10 @@ import NextInQueue from "./components/NextInQueue";
 import NowPlayingButton from "./components/NowPlayingButton";
 import MoreInfoButton from "./components/MoreInfoButton";
 import VercelAddOns from "./components/VercelAddOns";
+import { SpotifyWrapped } from "./components/SpotifyWrapped/SpotifyWrapped";
 import { cache, CACHE_KEYS, CACHE_DURATIONS } from "./utils/cache";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = "https://spotify-broadcast-backend.vercel.app" //process.env.REACT_APP_BACKEND_URL;
 
 function App() {
   const [track, setTrack] = useState(null);
@@ -37,6 +38,8 @@ function App() {
   );
   const [activeTab, setActiveTab] = useState("tracks");
   const [showNothingPlaying, setShowNothingPlaying] = useState(false);
+  const [showWrapped, setShowWrapped] = useState(false);
+  const [wrappedData, setWrappedData] = useState(null);
 
   const fac = useMemo(() => new FastAverageColor(), []);
 
@@ -223,6 +226,59 @@ function App() {
     }
   }, [user, createRoundedFavicon]);
 
+  // Fetch Spotify Wrapped data
+  const fetchWrappedData = async () => {
+    try {
+      const [wrappedRes, showsRes] = await Promise.all([
+        axios.get(`${BACKEND_URL}/wrapped?period=medium_term`),
+        axios.get(`${BACKEND_URL}/saved-shows`)
+      ]);
+      
+      setWrappedData({
+        ...wrappedRes.data,
+        saved_shows: showsRes.data || []
+      });
+    } catch (error) {
+      console.error("Failed to fetch wrapped data:", error);
+      // Fallback to mock data for testing
+      setWrappedData({
+        period: "Past Year",
+        top_artists: topArtists.slice(0, 10),
+        top_tracks: topTracks.slice(0, 10),
+        top_genres: ["rock", "pop", "hip hop", "electronic", "indie"],
+        saved_shows: []
+      });
+    }
+  };
+
+  // Show Spotify Wrapped view
+  if (showWrapped) {
+    return wrappedData ? (
+      <div style={{ position: "relative" }}>
+        <button
+          onClick={() => setShowWrapped(false)}
+          style={{
+            position: "absolute",
+            top: "20px",
+            left: "20px",
+            zIndex: 1000,
+            background: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            border: "none",
+            padding: "10px 15px",
+            borderRadius: "25px",
+            cursor: "pointer",
+          }}
+        >
+          ← Back to Dashboard
+        </button>
+        <SpotifyWrapped data={wrappedData} />
+      </div>
+    ) : (
+      <LoadingSpinner />
+    );
+  }
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -237,6 +293,26 @@ function App() {
             style={{ maxWidth: "1200px", padding: "0 1rem" }}
           >
             <UserProfile user={user} />
+
+            {/* Spotify Wrapped Button */}
+            <div className="d-flex justify-content-center mb-3">
+              <button
+                className="btn btn-success btn-lg"
+                onClick={async () => {
+                  await fetchWrappedData();
+                  setShowWrapped(true);
+                }}
+                style={{
+                  background: "linear-gradient(90deg, #1DB954, #1ed760)",
+                  border: "none",
+                  borderRadius: "25px",
+                  padding: "12px 30px",
+                  fontWeight: "bold",
+                }}
+              >
+                🎵 View Your Spotify Wrapped
+              </button>
+            </div>
 
             {/* Toggle button - only show when music is actually playing */}
             {track && track.track_id && (
@@ -295,6 +371,27 @@ function App() {
           style={{ maxWidth: "1200px", padding: "0 1rem" }}
         >
           <UserProfile user={user} maxNameLength={100} />
+
+          {/* Spotify Wrapped Button */}
+          <div className="d-flex justify-content-center mb-3">
+            <button
+              className="btn btn-success"
+              onClick={async () => {
+                await fetchWrappedData();
+                setShowWrapped(true);
+              }}
+              style={{
+                background: "linear-gradient(90deg, #1DB954, #1ed760)",
+                border: "none",
+                borderRadius: "20px",
+                padding: "8px 20px",
+                fontWeight: "bold",
+                fontSize: "0.9rem",
+              }}
+            >
+              🎵 Spotify Wrapped
+            </button>
+          </div>
 
           {/* Toggle button */}
           <MoreInfoButton setShowNothingPlaying={setShowNothingPlaying} />
