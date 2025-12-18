@@ -194,16 +194,9 @@ function App() {
     // Test if Spotify Wrapped API is available
     const testWrappedAPI = async () => {
       try {
-        const response = await axios.get(
-          `${BACKEND_URL}/wrapped?period=short_term&limit=1`
-        );
+        const response = await axios.get(`${BACKEND_URL}/wrapped?period=short_term&limit=1`);
         // If we get a successful response with data, show the button
-        if (
-          response.data &&
-          (response.data.top_artists ||
-            response.data.top_tracks ||
-            response.data.top_genres)
-        ) {
+        if (response.data && (response.data.top_artists || response.data.top_tracks || response.data.top_genres)) {
           setWrappedAvailable(true);
         }
       } catch (error) {
@@ -254,12 +247,12 @@ function App() {
     try {
       const [wrappedRes, showsRes] = await Promise.all([
         axios.get(`${BACKEND_URL}/wrapped?period=long_term`),
-        axios.get(`${BACKEND_URL}/saved-shows`),
+        axios.get(`${BACKEND_URL}/saved-shows`)
       ]);
-
+      
       setWrappedData({
         ...wrappedRes.data,
-        saved_shows: showsRes.data || [],
+        saved_shows: showsRes.data || []
       });
     } catch (error) {
       console.error("Failed to fetch wrapped data:", error);
@@ -269,10 +262,7 @@ function App() {
   // Show Spotify Wrapped view
   if (showWrapped) {
     return wrappedData ? (
-      <SpotifyWrapped
-        data={wrappedData}
-        onClose={() => setShowWrapped(false)}
-      />
+      <SpotifyWrapped data={wrappedData} onClose={() => setShowWrapped(false)} />
     ) : (
       <LoadingSpinner />
     );

@@ -14,6 +14,7 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
 
   const handleTabClick = (tabId) => {
     if (tabId === "wrapped" && onWrappedClick) {
+      // Don't set activeTab for wrapped since it's not a regular tab
       onWrappedClick();
     } else {
       setActiveTab(tabId);
@@ -29,16 +30,23 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
             background: transparent !important;
             border: none !important;
             border-radius: 6px;
-            overflow: hidden; 
+            overflow: hidden;
+            transition: transform 0.3s ease;
+          }
+          
+          .circling-border-btn:hover {
+            transform: scale(1.02);
           }
           
           .circling-border-btn::before {
             content: '';
             position: absolute;
-            width: 180px;
-            height: 180px;
-            left: -20px;
-            top: -65px;
+            width: calc(100% + 40px);
+            // height: calc(100% + 40px);
+            aspect-ratio: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
             background: conic-gradient(
               from 0deg,
               #00e5ff,
@@ -67,16 +75,18 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
           }
           
           @keyframes rotateGradient {
-            0% {
-              transform: rotate(0deg);
+            from {
+              transform: translate(-50%, -50%) rotate(0deg);
             }
-            100% {
-              transform: rotate(360deg);
+            to {
+              transform: translate(-50%, -50%) rotate(360deg);
             }
           }
           
-          .circling-border-btn:hover::before {
-            animation-duration: 1s;
+          .circling-border-btn:focus,
+          .circling-border-btn:active {
+            outline: none !important;
+            box-shadow: none !important;
           }
         `}
       </style>
@@ -89,6 +99,7 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
               activeTab === tab.id ? "btn-success" : "btn-outline-light"
             } ${tab.id === "wrapped" ? "circling-border-btn" : ""}`}
             style={{ minWidth: "140px" }}
+            type="button"
           >
             <span>{tab.label}</span>
           </button>
