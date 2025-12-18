@@ -9,7 +9,7 @@ export const TopTracksSlide = ({ tracks }) => {
 
   return (
     <div className="container-fluid h-100 d-flex flex-column justify-content-center align-items-center text-center py-4">
-      <h2 className="mb-4">Your Top Tracks</h2>
+      <h2 className="mb-4">My Top Tracks</h2>
 
       <div
         className="row row-cols-2 row-cols-md-5 row-cols-lg-5 g-3 w-100"

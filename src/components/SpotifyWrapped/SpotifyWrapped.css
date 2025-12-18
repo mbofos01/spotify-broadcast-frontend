@@ -1,8 +1,7 @@
 .spotify-wrapped {
   width: 100%;
   height: 100vh;
-  /* background: linear-gradient(135deg, #2c5282, #3182ce, #2d3748); */
-  background: linear-gradient(135deg, #822c2c, #ce3131, #482d2d);
+  /* Remove hardcoded background - now set dynamically in JS */
   color: white;
   font-family: "Spotify Circular", Arial, sans-serif;
   overflow: hidden;

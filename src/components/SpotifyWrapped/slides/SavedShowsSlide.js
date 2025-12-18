@@ -13,8 +13,8 @@ export const SavedShowsSlide = ({ shows }) => {
 
   return (
     <div className="container-fluid h-100 d-flex flex-column justify-content-center align-items-center text-center py-4">
-      <h2 className="mb-2">Your Podcast Collection</h2>
-      <p className="text-white-50 fst-italic mb-4">The shows that captured your attention</p>
+      <h2 className="mb-2">My Podcast Collection</h2>
+      <p className="text-white-50 fst-italic mb-4">The shows that captured my attention</p>
       
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 w-100" style={{maxHeight: '65vh', overflowY: 'auto', maxWidth: '1200px'}}>
         {shows.map((show, index) => (
@@ -24,25 +24,25 @@ export const SavedShowsSlide = ({ shows }) => {
                 <span className="h6 text-info fw-bold mb-0 rank">#{index + 1}</span>
                 <span className="badge bg-dark bg-opacity-80 text-light">PODCAST</span>
               </div>
-              <div className="card-body text-center p-3 d-flex flex-column">
+              <div className="card-body text-center p-2 d-flex flex-column">
                 <img 
                   src={getBestImage(show)}
                   alt={show.name}
-                  className="rounded mb-3 shadow align-self-center"
-                  style={{width: '100px', height: '100px', objectFit: 'cover'}}
+                  className="rounded mb-2 shadow align-self-center"
+                  style={{width: '80px', height: '80px', objectFit: 'cover'}}
                 />
                 <h6 className="card-title mb-2 text-truncate" title={show.name} style={{maxHeight: '3rem', lineHeight: '1.5rem'}}>
                   {show.name}
                 </h6>
-                <p className="text-light small mb-3 text-truncate" title={show.publisher}>
+                <p className="text-light small mb-2 text-truncate" title={show.publisher}>
                   by {show.publisher}
                 </p>
                 
                 {show.description && (
-                  <div className="bg-dark bg-opacity-20 p-3 rounded text-start mb-3 border-start border-light border-3 flex-grow-1 d-flex align-items-start">
+                  <div className="bg-dark bg-opacity-20 p-2 rounded text-start mb-2 border-start border-light border-3 flex-grow-1 d-flex align-items-start">
                     <small className="text-white-75">
-                      {show.description.length > 150 
-                        ? `${show.description.substring(0, 150)}...` 
+                      {show.description.length > 120 
+                        ? `${show.description.substring(0, 120)}...` 
                         : show.description}
                     </small>
                   </div>

@@ -3,8 +3,8 @@ import React from 'react';
 export const TopGenresSlide = ({ genres }) => {
   return (
     <div className="container-fluid h-100 d-flex flex-column justify-content-center align-items-center text-center py-4">
-      <h2 className="mb-2">Your Musical Taste</h2>
-      <p className="text-white-50 fst-italic mb-4">The genres that shaped your year</p>
+      <h2 className="mb-2">My Musical Taste</h2>
+      <p className="text-white-50 fst-italic mb-4">The genres that shaped my year</p>
       
       <div className="row row-cols-1 row-cols-md-2 g-3 w-100" style={{maxHeight: '60vh', overflowY: 'auto', maxWidth: '800px'}}>
         {genres.map((genre, index) => (

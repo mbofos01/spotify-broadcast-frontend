@@ -3,7 +3,7 @@ import React from 'react';
 export const TopArtistsSlide = ({ artists }) => {
   return (
     <div className="container-fluid h-100 d-flex flex-column justify-content-center align-items-center text-center py-4">
-      <h2 className="mb-4">Your Top Artists</h2>
+      <h2 className="mb-4">My Top Artists</h2>
       
       <div className="row row-cols-2 row-cols-md-5 row-cols-lg-5 g-3 w-100" style={{maxHeight: '70vh', overflowY: 'auto', maxWidth: '1200px'}}>
         {artists.map((artist, index) => (
