@@ -16,26 +16,30 @@ export const SavedShowsSlide = ({ shows }) => {
       <h2 className="mb-2">Your Podcast Collection</h2>
       <p className="text-white-50 fst-italic mb-4">The shows that captured your attention</p>
       
-      <div className="row g-3 w-100" style={{maxHeight: '65vh', overflowY: 'auto', maxWidth: '1200px'}}>
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 w-100" style={{maxHeight: '65vh', overflowY: 'auto', maxWidth: '1200px'}}>
         {shows.map((show, index) => (
-          <div key={show.id} className="col-12 col-md-6 col-lg-4">
-            <div className="card bg-white bg-opacity-10 text-white border-0 h-100">
-              <div className="card-header bg-info bg-opacity-20 d-flex justify-content-between align-items-center">
-                <span className="h6 text-info fw-bold mb-0">#{index + 1}</span>
-                <span className="badge bg-info bg-opacity-80 text-dark">PODCAST</span>
+          <div key={show.id} className="col d-flex">
+            <div className="card bg-white bg-opacity-10 text-white border-0 flex-fill">
+              <div className="card-header bg-info color-override bg-opacity-20 d-flex justify-content-between align-items-center">
+                <span className="h6 text-info fw-bold mb-0 rank">#{index + 1}</span>
+                <span className="badge bg-dark bg-opacity-80 text-light">PODCAST</span>
               </div>
-              <div className="card-body text-center p-3">
+              <div className="card-body text-center p-3 d-flex flex-column">
                 <img 
                   src={getBestImage(show)}
                   alt={show.name}
-                  className="rounded mb-3 shadow"
+                  className="rounded mb-3 shadow align-self-center"
                   style={{width: '100px', height: '100px', objectFit: 'cover'}}
                 />
-                <h6 className="card-title mb-2">{show.name}</h6>
-                <p className="text-info small mb-3">by {show.publisher}</p>
+                <h6 className="card-title mb-2 text-truncate" title={show.name} style={{maxHeight: '3rem', lineHeight: '1.5rem'}}>
+                  {show.name}
+                </h6>
+                <p className="text-light small mb-3 text-truncate" title={show.publisher}>
+                  by {show.publisher}
+                </p>
                 
                 {show.description && (
-                  <div className="bg-dark bg-opacity-20 p-3 rounded text-start mb-3 border-start border-info border-3" style={{minHeight: '80px'}}>
+                  <div className="bg-dark bg-opacity-20 p-3 rounded text-start mb-3 border-start border-light border-3 flex-grow-1 d-flex align-items-start">
                     <small className="text-white-75">
                       {show.description.length > 150 
                         ? `${show.description.substring(0, 150)}...` 
@@ -45,7 +49,7 @@ export const SavedShowsSlide = ({ shows }) => {
                 )}
                 
                 {show.total_episodes && (
-                  <div className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center mt-auto">
                     <span className="badge bg-white bg-opacity-10 text-white">
                       📺 {show.total_episodes} episodes
                     </span>

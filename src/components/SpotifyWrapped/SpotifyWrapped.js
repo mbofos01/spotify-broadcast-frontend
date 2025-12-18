@@ -57,7 +57,7 @@ export const SpotifyWrapped = ({ data }) => {
             backgroundColor: 'rgba(255, 255, 255, 0.3)',
           },
           '& .MuiMobileStepper-dotActive': {
-            backgroundColor: '#4299e1',
+            backgroundColor: '#b9bfc4ff',
           },
           '& .MuiButton-root': {
             color: 'white',
