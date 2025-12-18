@@ -2,79 +2,55 @@ import React from 'react';
 
 export const SavedShowsSlide = ({ shows }) => {
   const getBestImage = (show) => {
-    // Debug: log the show data to see what we're working with
-    console.log('Show images:', show.images, 'image_url:', show.image_url);
-    
-    // Try multiple approaches to get the best image
     if (show.images && show.images.length > 0) {
-      // Method 1: Get the first (usually highest res) image
       const firstImage = show.images[0];
       if (firstImage && firstImage.url) {
         return firstImage.url;
       }
-      
-      // Method 2: Find the largest image by dimensions
-      const largestImage = show.images.reduce((largest, current) => {
-        const currentSize = (current.width || 0) * (current.height || 0);
-        const largestSize = (largest.width || 0) * (largest.height || 0);
-        return currentSize > largestSize ? current : largest;
-      }, show.images[0]);
-      
-      if (largestImage && largestImage.url) {
-        return largestImage.url;
-      }
     }
-    
-    // Fallback to image_url
     return show.image_url || 'https://via.placeholder.com/300x300?text=No+Image';
   };
 
   return (
-    <div className="saved-shows-slide">
-      <h2>Your Podcast Collection</h2>
-      <p className="shows-subtitle">The shows that captured your attention</p>
+    <div className="container-fluid h-100 d-flex flex-column justify-content-center align-items-center text-center py-4">
+      <h2 className="mb-2">Your Podcast Collection</h2>
+      <p className="text-white-50 fst-italic mb-4">The shows that captured your attention</p>
       
-      <div className="shows-grid">
+      <div className="row g-3 w-100" style={{maxHeight: '65vh', overflowY: 'auto', maxWidth: '1200px'}}>
         {shows.map((show, index) => (
-          <div key={show.id} className="show-tab">
-            <div className="tab-header">
-              <span className="rank">#{index + 1}</span>
-              <div className="tab-type">PODCAST</div>
-            </div>
-            
-            <div className="tab-content">
-              <div className="show-artwork">
-                <img 
-                  src={getBestImage(show)} 
-                  alt={show.name}
-                  onError={(e) => {
-                    console.log('Image failed to load:', e.target.src);
-                    e.target.src = 'https://via.placeholder.com/300x300?text=No+Image';
-                  }}
-                />
+          <div key={show.id} className="col-12 col-md-6 col-lg-4">
+            <div className="card bg-white bg-opacity-10 text-white border-0 h-100">
+              <div className="card-header bg-info bg-opacity-20 d-flex justify-content-between align-items-center">
+                <span className="h6 text-info fw-bold mb-0">#{index + 1}</span>
+                <span className="badge bg-info bg-opacity-80 text-dark">PODCAST</span>
               </div>
-              
-              <div className="show-details">
-                <h3 className="show-title">{show.name}</h3>
-                <p className="show-publisher">by {show.publisher}</p>
+              <div className="card-body text-center p-3">
+                <img 
+                  src={getBestImage(show)}
+                  alt={show.name}
+                  className="rounded mb-3 shadow"
+                  style={{width: '100px', height: '100px', objectFit: 'cover'}}
+                />
+                <h6 className="card-title mb-2">{show.name}</h6>
+                <p className="text-info small mb-3">by {show.publisher}</p>
                 
                 {show.description && (
-                  <div className="show-description">
-                    <p>{show.description.length > 200 
-                      ? `${show.description.substring(0, 200)}...` 
-                      : show.description}
-                    </p>
+                  <div className="bg-dark bg-opacity-20 p-3 rounded text-start mb-3 border-start border-info border-3" style={{minHeight: '80px'}}>
+                    <small className="text-white-75">
+                      {show.description.length > 150 
+                        ? `${show.description.substring(0, 150)}...` 
+                        : show.description}
+                    </small>
                   </div>
                 )}
                 
-                <div className="show-meta">
-                  {show.total_episodes && (
-                    <span className="meta-item">
-                      <span className="meta-icon">📺</span>
-                      {show.total_episodes} episodes
+                {show.total_episodes && (
+                  <div className="d-flex justify-content-center">
+                    <span className="badge bg-white bg-opacity-10 text-white">
+                      📺 {show.total_episodes} episodes
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -82,10 +58,10 @@ export const SavedShowsSlide = ({ shows }) => {
       </div>
       
       {shows.length === 0 && (
-        <div className="no-shows">
-          <span className="no-shows-icon">🎙️</span>
-          <p>No saved podcasts found</p>
-          <span className="no-shows-subtitle">Start exploring podcasts to see them here!</span>
+        <div className="text-center py-5">
+          <div className="display-1 opacity-50 mb-3">🎙️</div>
+          <h4>No saved podcasts found</h4>
+          <p className="text-white-50">Start exploring podcasts to see them here!</p>
         </div>
       )}
     </div>

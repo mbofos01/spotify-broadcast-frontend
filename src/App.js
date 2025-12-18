@@ -230,7 +230,7 @@ function App() {
   const fetchWrappedData = async () => {
     try {
       const [wrappedRes, showsRes] = await Promise.all([
-        axios.get(`${BACKEND_URL}/wrapped?period=medium_term`),
+        axios.get(`${BACKEND_URL}/wrapped?period=long_term`),
         axios.get(`${BACKEND_URL}/saved-shows`)
       ]);
       
@@ -240,14 +240,6 @@ function App() {
       });
     } catch (error) {
       console.error("Failed to fetch wrapped data:", error);
-      // Fallback to mock data for testing
-      setWrappedData({
-        period: "Past Year",
-        top_artists: topArtists.slice(0, 10),
-        top_tracks: topTracks.slice(0, 10),
-        top_genres: ["rock", "pop", "hip hop", "electronic", "indie"],
-        saved_shows: []
-      });
     }
   };
 
@@ -259,18 +251,24 @@ function App() {
           onClick={() => setShowWrapped(false)}
           style={{
             position: "absolute",
-            top: "20px",
-            left: "20px",
+            top: "15px",
+            left: "15px",
             zIndex: 1000,
             background: "rgba(0, 0, 0, 0.7)",
             color: "white",
             border: "none",
-            padding: "10px 15px",
-            borderRadius: "25px",
+            padding: "8px 12px",
+            borderRadius: "20px",
             cursor: "pointer",
+            fontSize: "0.9rem",
+            fontWeight: "600",
+            backdropFilter: "blur(10px)",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px"
           }}
         >
-          ← Back to Dashboard
+          ← Back
         </button>
         <SpotifyWrapped data={wrappedData} />
       </div>

@@ -1,4 +1,9 @@
 import React, { useState, useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
+import MobileStepper from '@mui/material/MobileStepper';
+import Button from '@mui/material/Button';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { WelcomeSlide } from './slides/WelcomeSlide';
 import { TopArtistsSlide } from './slides/TopArtistsSlide';
 import { TopTracksSlide } from './slides/TopTracksSlide';
@@ -7,22 +12,23 @@ import { SavedShowsSlide } from './slides/SavedShowsSlide';
 import './SpotifyWrapped.css';
 
 export const SpotifyWrapped = ({ data }) => {
+  const theme = useTheme();
   const [currentSlide, setCurrentSlide] = useState(0);
   
   const slides = useMemo(() => [
     { id: 'welcome', component: <WelcomeSlide period={data.period} /> },
     { id: 'artists', component: <TopArtistsSlide artists={data.top_artists} /> },
     { id: 'tracks', component: <TopTracksSlide tracks={data.top_tracks} /> },
-    { id: 'shows', component: <SavedShowsSlide shows={data.saved_shows || []} /> },
     { id: 'genres', component: <TopGenresSlide genres={data.top_genres} /> },
+    { id: 'shows', component: <SavedShowsSlide shows={data.saved_shows || []} /> },
   ], [data]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const handleNext = () => {
+    setCurrentSlide((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const handleBack = () => {
+    setCurrentSlide((prevActiveStep) => prevActiveStep - 1);
   };
 
   return (
@@ -40,23 +46,48 @@ export const SpotifyWrapped = ({ data }) => {
         </div>
       </div>
       
-      <div className="navigation">
-        <button onClick={prevSlide} disabled={currentSlide === 0}>
-          Previous
-        </button>
-        <div className="slide-indicators">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
-            />
-          ))}
-        </div>
-        <button onClick={nextSlide} disabled={currentSlide === slides.length - 1}>
-          Next
-        </button>
-      </div>
+      <MobileStepper
+        variant="dots"
+        steps={slides.length}
+        position="static"
+        activeStep={currentSlide}
+        sx={{ 
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          '& .MuiMobileStepper-dot': {
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+          },
+          '& .MuiMobileStepper-dotActive': {
+            backgroundColor: '#4299e1',
+          },
+          '& .MuiButton-root': {
+            color: 'white',
+            fontWeight: 600,
+          },
+          '& .MuiButton-root:disabled': {
+            color: 'rgba(255, 255, 255, 0.5)',
+          },
+        }}
+        nextButton={
+          <Button size="small" onClick={handleNext} disabled={currentSlide === slides.length - 1}>
+            Next
+            {theme.direction === 'rtl' ? (
+              <KeyboardArrowLeft />
+            ) : (
+              <KeyboardArrowRight />
+            )}
+          </Button>
+        }
+        backButton={
+          <Button size="small" onClick={handleBack} disabled={currentSlide === 0}>
+            {theme.direction === 'rtl' ? (
+              <KeyboardArrowRight />
+            ) : (
+              <KeyboardArrowLeft />
+            )}
+            Back
+          </Button>
+        }
+      />
     </div>
   );
 };
