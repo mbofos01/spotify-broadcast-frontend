@@ -38,7 +38,7 @@ export const SavedShowsSlide = ({ shows }) => {
                   by {show.publisher}
                 </p>
                 
-                {show.description && (
+                {/* {show.description && (
                   <div className="bg-dark bg-opacity-20 p-2 rounded text-start mb-2 border-start border-light border-3 flex-grow-1 d-flex align-items-start">
                     <small className="text-white-75">
                       {show.description.length > 120 
@@ -46,7 +46,7 @@ export const SavedShowsSlide = ({ shows }) => {
                         : show.description}
                     </small>
                   </div>
-                )}
+                )} */}
                 
                 {show.total_episodes && (
                   <div className="d-flex justify-content-center mt-auto">
