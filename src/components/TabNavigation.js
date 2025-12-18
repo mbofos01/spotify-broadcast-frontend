@@ -1,13 +1,16 @@
 import React from "react";
 
-function TabNavigation({ activeTab, setActiveTab, onWrappedClick }) {
-  const tabs = [
+function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab = false }) {
+  const baseTabs = [
     { id: "tracks", label: "Tracks" },
     { id: "artists", label: "Artists" },
     { id: "recent", label: "Recently Played" },
     { id: "playlists", label: "Playlists" },
-    { id: "wrapped", label: "Wrapped" }
   ];
+
+  const tabs = showWrappedTab 
+    ? [...baseTabs, { id: "wrapped", label: "Wrapped" }]
+    : baseTabs;
 
   const handleTabClick = (tabId) => {
     if (tabId === "wrapped" && onWrappedClick) {

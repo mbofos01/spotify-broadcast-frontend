@@ -40,6 +40,7 @@ function App() {
   const [showNothingPlaying, setShowNothingPlaying] = useState(false);
   const [showWrapped, setShowWrapped] = useState(false);
   const [wrappedData, setWrappedData] = useState(null);
+  const [wrappedAvailable, setWrappedAvailable] = useState(false);
 
   const fac = useMemo(() => new FastAverageColor(), []);
 
@@ -190,6 +191,20 @@ function App() {
       }
     };
 
+    // Test if Spotify Wrapped API is available
+    const testWrappedAPI = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/wrapped?period=short_term&limit=1`);
+        // If we get a successful response with data, show the button
+        if (response.data && (response.data.top_artists || response.data.top_tracks || response.data.top_genres)) {
+          setWrappedAvailable(true);
+        }
+      } catch (error) {
+        console.log("Wrapped API not available:", error.message);
+        setWrappedAvailable(false);
+      }
+    };
+
     const init = async () => {
       await Promise.all([
         fetchUser(),
@@ -199,6 +214,7 @@ function App() {
         fetchRecentlyPlayed(),
         fetchPlaylists(),
         fetchNextInQueue(),
+        testWrappedAPI(), // Add this test
       ]);
       setLoading(false);
     };
@@ -296,6 +312,7 @@ function App() {
                     await fetchWrappedData();
                     setShowWrapped(true);
                   }}
+                  showWrappedTab={wrappedAvailable}
                 />
 
                 <AnimatePresence mode="wait">
