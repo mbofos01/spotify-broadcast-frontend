@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import MobileStepper from "@mui/material/MobileStepper";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import { useSwipeable } from 'react-swipeable';
 import { WelcomeSlide } from "./slides/WelcomeSlide";
 import { TopArtistsSlide } from "./slides/TopArtistsSlide";
 import { TopTracksSlide } from "./slides/TopTracksSlide";
@@ -67,8 +68,25 @@ export const SpotifyWrapped = ({ data, onClose }) => {
     setCurrentSlide((prevActiveStep) => prevActiveStep - 1);
   };
 
+  // Add swipe handlers
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (currentSlide < slides.length - 1) {
+        handleNext();
+      }
+    },
+    onSwipedRight: () => {
+      if (currentSlide > 0) {
+        handleBack();
+      }
+    },
+    trackMouse: true, // Also works with mouse drag on desktop
+    preventScrollOnSwipe: false, // Allow vertical scrolling
+    delta: 50 // Minimum swipe distance
+  });
+
   return (
-    <div className="spotify-wrapped" style={gradientStyle}>
+    <div className="spotify-wrapped" style={gradientStyle} {...swipeHandlers}>
       {/* Close button */}
       {onClose && (
         <button

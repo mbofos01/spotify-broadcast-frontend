@@ -31,11 +31,16 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
             border: none !important;
             border-radius: 6px;
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease, opacity 0.2s ease;
           }
           
           .circling-border-btn:hover {
             transform: scale(1.02);
+          }
+          
+          .circling-border-btn:active {
+            transform: scale(0.98);
+            opacity: 0.8;
           }
           
           .circling-border-btn::before {
@@ -87,6 +92,11 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
           .circling-border-btn:active {
             outline: none !important;
             box-shadow: none !important;
+          }
+          
+          .circling-border-btn:disabled {
+            pointer-events: none;
+            opacity: 0.6;
           }
         `}
       </style>
