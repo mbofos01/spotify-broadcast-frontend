@@ -246,32 +246,7 @@ function App() {
   // Show Spotify Wrapped view
   if (showWrapped) {
     return wrappedData ? (
-      <div style={{ position: "relative" }}>
-        <button
-          onClick={() => setShowWrapped(false)}
-          style={{
-            position: "absolute",
-            top: "15px",
-            left: "15px",
-            zIndex: 1000,
-            background: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            border: "none",
-            padding: "8px 12px",
-            borderRadius: "20px",
-            cursor: "pointer",
-            fontSize: "0.9rem",
-            fontWeight: "600",
-            backdropFilter: "blur(10px)",
-            display: "flex",
-            alignItems: "center",
-            gap: "5px"
-          }}
-        >
-          ← Back
-        </button>
-        <SpotifyWrapped data={wrappedData} />
-      </div>
+      <SpotifyWrapped data={wrappedData} onClose={() => setShowWrapped(false)} />
     ) : (
       <LoadingSpinner />
     );
@@ -292,25 +267,7 @@ function App() {
           >
             <UserProfile user={user} />
 
-            {/* Spotify Wrapped Button */}
-            <div className="d-flex justify-content-center mb-3">
-              <button
-                className="btn btn-success btn-lg"
-                onClick={async () => {
-                  await fetchWrappedData();
-                  setShowWrapped(true);
-                }}
-                style={{
-                  background: "linear-gradient(90deg, #1DB954, #1ed760)",
-                  border: "none",
-                  borderRadius: "25px",
-                  padding: "12px 30px",
-                  fontWeight: "bold",
-                }}
-              >
-                🎵 View Your Spotify Wrapped
-              </button>
-            </div>
+            {/* Remove the Spotify Wrapped Button from here */}
 
             {/* Toggle button - only show when music is actually playing */}
             {track && track.track_id && (
@@ -335,6 +292,10 @@ function App() {
                 <TabNavigation
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}
+                  onWrappedClick={async () => {
+                    await fetchWrappedData();
+                    setShowWrapped(true);
+                  }}
                 />
 
                 <AnimatePresence mode="wait">
@@ -370,26 +331,7 @@ function App() {
         >
           <UserProfile user={user} maxNameLength={100} />
 
-          {/* Spotify Wrapped Button */}
-          <div className="d-flex justify-content-center mb-3">
-            <button
-              className="btn btn-success"
-              onClick={async () => {
-                await fetchWrappedData();
-                setShowWrapped(true);
-              }}
-              style={{
-                background: "linear-gradient(90deg, #1DB954, #1ed760)",
-                border: "none",
-                borderRadius: "20px",
-                padding: "8px 20px",
-                fontWeight: "bold",
-                fontSize: "0.9rem",
-              }}
-            >
-              🎵 Spotify Wrapped
-            </button>
-          </div>
+          {/* Remove the Spotify Wrapped Button from here too */}
 
           {/* Toggle button */}
           <MoreInfoButton setShowNothingPlaying={setShowNothingPlaying} />

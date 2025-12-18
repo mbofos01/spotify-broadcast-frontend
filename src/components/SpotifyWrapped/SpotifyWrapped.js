@@ -11,7 +11,7 @@ import { TopGenresSlide } from './slides/TopGenresSlide';
 import { SavedShowsSlide } from './slides/SavedShowsSlide';
 import './SpotifyWrapped.css';
 
-export const SpotifyWrapped = ({ data }) => {
+export const SpotifyWrapped = ({ data, onClose }) => {
   const theme = useTheme();
   const [currentSlide, setCurrentSlide] = useState(0);
   
@@ -33,6 +33,23 @@ export const SpotifyWrapped = ({ data }) => {
 
   return (
     <div className="spotify-wrapped">
+      {/* Close button */}
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="btn btn-outline-light position-absolute"
+          style={{
+            top: '20px',
+            left: '20px',
+            zIndex: 1000,
+            borderRadius: '20px',
+            padding: '8px 16px'
+          }}
+        >
+          ← Back
+        </button>
+      )}
+      
       <div className="slide-container">
         <div 
           className="slides-wrapper"
