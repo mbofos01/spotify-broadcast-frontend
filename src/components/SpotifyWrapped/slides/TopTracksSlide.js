@@ -1,11 +1,11 @@
 import React from "react";
 
 export const TopTracksSlide = ({ tracks }) => {
-  const formatDuration = (ms) => {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
+  // const formatDuration = (ms) => {
+  //   const minutes = Math.floor(ms / 60000);
+  //   const seconds = Math.floor((ms % 60000) / 1000);
+  //   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  // };
 
   return (
     <div className="container-fluid h-100 d-flex flex-column justify-content-center align-items-center text-center py-4">
