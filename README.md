@@ -4,6 +4,18 @@ A real-time Spotify activity dashboard that displays your currently playing trac
 
 > **Backend Repository**: This project requires the [Spotify Broadcast Backend](https://github.com/mbofos01/spotify-broadcast-backend) to function. Make sure to set it up first.
 
+## Screenshots
+
+### Mobile
+
+<img src="assets/broadcast_mobile.jpg" alt="Broadcast Mobile" width="300">
+<img src="assets/info_mobile.jpg" alt="Info Mobile" width="300">
+
+### PC
+
+<img src="assets/broadcast_pc.png" alt="Broadcast PC" width="600">
+<img src="assets/info_pc.png" alt="Info PC" width="600">
+
 ## Features
 
 - 🎵 **Real-time Now Playing** - See what's currently playing with album art and progress bar
@@ -35,12 +47,14 @@ Replace `http://localhost:5000` with your backend URL if deployed elsewhere.
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/spotify-broadcast-frontend.git
 cd spotify-broadcast-frontend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -48,6 +62,7 @@ npm install
 3. Create your `.env` file (see Environment Setup above)
 
 4. Start the development server:
+
 ```bash
 npm start
 ```
