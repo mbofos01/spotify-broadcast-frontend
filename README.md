@@ -8,13 +8,21 @@ A real-time Spotify activity dashboard that displays your currently playing trac
 
 ### Mobile
 
-<img src="assets/broadcast_mobile.jpg" alt="Broadcast Mobile" width="300">
-<img src="assets/info_mobile.jpg" alt="Info Mobile" width="300">
+<div align="center">
+
+    <img src="assets/broadcast_mobile.jpg" alt="Broadcast Mobile" width="300"> <img src="assets/info_mobile.jpg" alt="Info Mobile" width="300"> 
+
+</div>
 
 ### PC
 
-<img src="assets/broadcast_pc.png" alt="Broadcast PC" width="600">
-<img src="assets/info_pc.png" alt="Info PC" width="600">
+<div align="center">
+  <img src="assets/broadcast_pc.png" alt="Broadcast PC" width="100%">
+</div>
+
+<div align="center">
+  <img src="assets/info_pc.png" alt="Info PC" width="100%">
+</div>
 
 ## Features
 
