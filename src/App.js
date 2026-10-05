@@ -381,7 +381,9 @@ function App() {
             <div className="col-12 col-lg-4" id="info-tab">
               <div className="sidebar-panel">
                 <NextInQueue track={nextInQueue} />
-                <RecentlyPlayedTab tracks={recentlyPlayed} />
+                <div className="sidebar-recent">
+                  <RecentlyPlayedTab tracks={recentlyPlayed} />
+                </div>
               </div>
             </div>
           </div>

@@ -765,8 +765,8 @@ body {
   }
 
   .is-dashboard .sidebar-panel {
-    height: 7rem;
-    padding: 0.8rem;
+    height: auto;
+    padding: 1rem;
   }
 
   .is-dashboard .queue-section {
@@ -774,10 +774,10 @@ body {
   }
 
   .is-dashboard .queue-section h5 {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.65rem;
   }
 
-  .is-dashboard .recently-played {
+  .is-dashboard .sidebar-recent {
     display: none;
   }
 
