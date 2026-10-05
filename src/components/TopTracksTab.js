@@ -49,7 +49,7 @@ function TopTracksTab({ tracks }) {
                       rel="noopener noreferrer"
                       title={artist.name}
                       style={{
-                        color: "#fff",
+                        color: "var(--broadcast-muted)",
                         textDecoration: "none",
                       }}
                     >

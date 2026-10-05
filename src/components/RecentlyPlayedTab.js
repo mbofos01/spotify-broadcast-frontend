@@ -50,10 +50,23 @@ function RecentlyPlayedTab({ tracks }) {
                 {truncateName(item.name || item.track, 20)}
               </a>
               <div style={{ fontSize: "13px" }}>
-                {truncateName(
-                  item.artists?.map((artist) => artist).join(", ") || "",
-                  30
-                )}
+                {item.artists?.map((artist, artistIndex) => (
+                  <React.Fragment key={`${artist}-${artistIndex}`}>
+                    {artistIndex > 0 && ", "}
+                    {item.artist_urls?.[artistIndex] ? (
+                      <a
+                        href={item.artist_urls[artistIndex]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "inherit", textDecoration: "none" }}
+                      >
+                        {truncateName(artist, 30)}
+                      </a>
+                    ) : (
+                      truncateName(artist, 30)
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
           </li>
