@@ -15,43 +15,38 @@ function NowPlayingCard({ track, gradient }) {
   return (
     <div
       id="now-playing-tab"
-      className="card text-center bg-secondary mx-auto"
-      style={{ maxWidth: "24rem" , marginBottom: "2rem"}}
+      className="card player-card"
     >
       <img
         src={track.image_url}
-        className="card-img-top"
+        className="player-artwork"
         alt="Track Art"
       />
-      <div className="card-body">
-        <h5 className="card-title">{track.track}</h5>
-        <p className="card-text mb-1">
+      <div className="card-body player-details">
+        <p className="player-eyebrow">Now playing</p>
+        <h1 className="card-title player-title">{track.track}</h1>
+        <p className="player-artists">
           {track.artists.map((artist) => artist).join(", ")}
         </p>
-        <p className="card-text text-muted">{track.album}</p>
+        <p className="player-album">{track.album}</p>
 
         {/* Progress bar */}
-        <div style={{ margin: "1rem 0" }}>
+        <div className="player-progress">
           <div
-            style={{
-              height: 10,
-              width: "100%",
-              background: "rgba(164, 169, 174, 1)",
-              borderRadius: 20,
-              overflow: "hidden",
-            }}
+            className="player-progress-track"
             title={`${elapsedTime} / ${totalTime}`}
           >
             <div
+              className="player-progress-fill"
               style={{
-                height: "100%",
                 width: `${(progress_ms / duration_ms) * 100}%`,
                 background: gradient,
-                borderRadius: 20,
-                transition: "width 400ms ease",
-                boxShadow: "0 0 8px rgba(29,185,84,0.3)",
               }}
             />
+          </div>
+          <div className="player-times">
+            <span>{elapsedTime}</span>
+            <span>{totalTime}</span>
           </div>
         </div>
 
@@ -64,14 +59,8 @@ function NowPlayingCard({ track, gradient }) {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#1DB954",
-              color: "white",
-              padding: "10px 16px",
-              borderRadius: "25px",
-              textDecoration: "none",
-              fontWeight: "bold",
-              fontSize: "14px",
             }}
+            className="spotify-listen-link"
           >
             <img
               src="/spotify.png"

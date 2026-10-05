@@ -29,7 +29,7 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
             position: relative;
             background: transparent !important;
             border: none !important;
-            border-radius: 6px;
+            border-radius: 999px;
             overflow: hidden;
             transition: transform 0.2s ease, opacity 0.2s ease;
           }
@@ -68,7 +68,7 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
             content: '';
             position: absolute;
             inset: 2px;
-            border-radius: 4px;
+            border-radius: 999px;
             background: #212529;
             z-index: 1;
           }
@@ -100,7 +100,7 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
           }
         `}
       </style>
-      <div className="d-flex flex-column flex-sm-row justify-content-center my-3 mb-3 gap-2">
+      <div className="d-flex flex-column flex-sm-row justify-content-center my-3 mb-3 gap-2 library-tabs">
         {tabs.map((tab) => (
           <button
             key={tab.id}

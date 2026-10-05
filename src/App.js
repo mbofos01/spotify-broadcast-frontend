@@ -4,6 +4,7 @@ import { FastAverageColor } from "fast-average-color";
 import { AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Widget.css";
+import "./App.css";
 
 // Components
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -276,11 +277,8 @@ function App() {
   if (showNothingPlaying || !track || !track.track_id) {
     return (
       <>
-        <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-          <div
-            className="container"
-            style={{ maxWidth: "1200px", padding: "0 1rem" }}
-          >
+        <div className="broadcast-page">
+          <main className="container broadcast-container">
             <UserProfile user={user} />
 
             {/* Remove the Spotify Wrapped Button from here */}
@@ -305,6 +303,7 @@ function App() {
 
               {/* Info Tab with Tabs */}
               <div className="col-12 col-lg-12" id="info-tab">
+               <div className="library-panel">
                 <TabNavigation
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}
@@ -329,9 +328,10 @@ function App() {
                     <PlaylistsTab playlists={playlists} />
                   )}
                 </AnimatePresence>
+               </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
         <VercelAddOns />
       </>
@@ -341,11 +341,8 @@ function App() {
   // Currently playing track view
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-dark text-light">
-        <div
-          className="container"
-          style={{ maxWidth: "1200px", padding: "0 1rem" }}
-        >
+      <div className="broadcast-page">
+        <main className="container broadcast-container">
           <UserProfile user={user} maxNameLength={100} />
 
           {/* Remove the Spotify Wrapped Button from here too */}
@@ -353,7 +350,7 @@ function App() {
           {/* Toggle button */}
           <MoreInfoButton setShowNothingPlaying={setShowNothingPlaying} />
 
-          <div className="row g-4">
+          <div className="row g-4 dashboard-grid">
             {/* Now Playing Tab */}
             <div className="col-12 col-lg-8">
               <NowPlayingCard track={track} gradient={gradient} />
@@ -361,11 +358,13 @@ function App() {
 
             {/* Info Tab */}
             <div className="col-12 col-lg-4" id="info-tab">
-              <NextInQueue track={nextInQueue} />
-              <RecentlyPlayedTab tracks={recentlyPlayed} />
+              <div className="sidebar-panel">
+                <NextInQueue track={nextInQueue} />
+                <RecentlyPlayedTab tracks={recentlyPlayed} />
+              </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
       <VercelAddOns />
     </>

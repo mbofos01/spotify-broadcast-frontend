@@ -6,7 +6,7 @@ function RecentlyPlayedTab({ tracks }) {
   // If used in sidebar (no motion), render simple list
   if (!tracks?.length) {
     return (
-      <div style={{ marginTop: "2rem" }}>
+      <div className="recently-played">
         <h5 className="text-center mt-3 mb-3">My Last Played Tracks</h5>
         <p className="text-center text-muted">No recent tracks available</p>
       </div>
@@ -18,12 +18,12 @@ function RecentlyPlayedTab({ tracks }) {
 
   const trackList = (
     <>
-      <h5 className="text-center mt-3 mb-3">My Last Played Tracks</h5>
-      <ul className="list-unstyled">
+      <h5 className="recent-title">Recently played</h5>
+      <ul className="list-unstyled recent-list">
         {tracks.map((item, index) => (
           <li
             key={item.track_id || `recent-${index}`}
-            className="mb-3 d-flex align-items-center"
+            className="recent-track"
           >
             <img
               src={item.image_url}
@@ -79,7 +79,7 @@ function RecentlyPlayedTab({ tracks }) {
   }
 
   // Return static version for sidebar
-  return <div style={{ marginTop: "2rem" }}>{trackList}</div>;
+  return <div className="recently-played">{trackList}</div>;
 }
 
 export default RecentlyPlayedTab;

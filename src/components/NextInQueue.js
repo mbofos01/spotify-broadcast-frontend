@@ -5,16 +5,9 @@ function NextInQueue({ track }) {
   if (!track) return null;
 
   return (
-    <div style={{ marginBottom: "2rem" }}>
-      <h5 className="text-center mb-3">Next in Queue</h5>
-      <div
-        className="d-flex align-items-center"
-        style={{
-          padding: "0.75rem",
-          background: "rgba(29, 185, 84, 0.1)",
-          borderRadius: "8px",
-        }}
-      >
+    <section className="queue-section">
+      <h5>Up next</h5>
+      <div className="queue-item">
         <img
           src={track.image_url}
           alt={track.name}
@@ -47,7 +40,7 @@ function NextInQueue({ track }) {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
