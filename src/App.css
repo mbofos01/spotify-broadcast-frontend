@@ -359,6 +359,23 @@ body {
   color: var(--broadcast-muted);
 }
 
+/* Keep Recently Played rows identical to the other tabs inside the library panel */
+.library-panel .recent-title {
+  text-align: center;
+}
+
+.library-panel .recent-track {
+  gap: 0;
+}
+
+.library-panel li {
+  gap: 0;
+}
+
+.library-panel .recent-track img {
+  margin-right: 12px !important;
+}
+
 @media (max-width: 767.98px) {
   .broadcast-container {
     min-height: auto;
