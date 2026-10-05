@@ -27,7 +27,7 @@ A real-time Spotify activity dashboard that displays your currently playing trac
 ## Features
 
 - 🎵 **Real-time Now Playing** - See what's currently playing with album art and progress bar
-- 🔄 **Auto-refresh** - Updates every 5 seconds for live tracking
+- 🔄 **Auto-refresh** - Updates every 2 seconds for live tracking
 - 📊 **Top Tracks & Artists** - View your recent top 5 tracks and artists
 - 🎧 **Recently Played** - See your last 5 played tracks
 - 📋 **Playlists** - Browse all your Spotify playlists

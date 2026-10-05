@@ -224,7 +224,7 @@ function App() {
       fetchTrack();
       fetchRecentlyPlayed();
       fetchNextInQueue();
-    }, 5000);
+    }, 2000);
     return () => clearInterval(interval);
   }, [extractColors]);
 
