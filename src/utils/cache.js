@@ -2,6 +2,7 @@ const CACHE_DURATIONS = {
   topTracks: 60 * 60 * 1000, // 1 hour
   topArtists: 60 * 60 * 1000, // 1 hour
   playlists: 30 * 60 * 1000, // 30 minutes
+  savedMedia: 30 * 60 * 1000, // 30 minutes
   user: 24 * 60 * 60 * 1000, // 24 hours
 };
 
@@ -97,6 +98,8 @@ export const CACHE_KEYS = {
   TOP_TRACKS: "spotify_top_tracks",
   TOP_ARTISTS: "spotify_top_artists",
   PLAYLISTS: "spotify_playlists",
+  SAVED_ALBUMS: "spotify_saved_albums",
+  SAVED_SHOWS: "spotify_saved_shows",
   USER: "spotify_user",
 };
 

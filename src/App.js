@@ -16,6 +16,8 @@ import TopTracksTab from "./components/TopTracksTab";
 import TopArtistsTab from "./components/TopArtistsTab";
 import RecentlyPlayedTab from "./components/RecentlyPlayedTab";
 import PlaylistsTab from "./components/PlaylistsTab";
+import SavedAlbumsTab from "./components/SavedAlbumsTab";
+import SavedShowsTab from "./components/SavedShowsTab";
 import NextInQueue from "./components/NextInQueue";
 import NowPlayingButton from "./components/NowPlayingButton";
 import MoreInfoButton from "./components/MoreInfoButton";
@@ -61,6 +63,8 @@ function App() {
   const [topArtists, setTopArtists] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [playlists, setPlaylists] = useState([]);
+  const [savedAlbums, setSavedAlbums] = useState([]);
+  const [savedShows, setSavedShows] = useState([]);
   const [nextInQueue, setNextInQueue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [gradient, setGradient] = useState(
@@ -212,6 +216,40 @@ function App() {
       }
     };
 
+    const fetchSavedAlbums = async () => {
+      const cached = cache.get(CACHE_KEYS.SAVED_ALBUMS);
+      if (cached) {
+        setSavedAlbums(cached);
+        return;
+      }
+
+      try {
+        const res = await axios.get(`${BACKEND_URL}/saved-albums?limit=20`);
+        const albums = res.data || [];
+        setSavedAlbums(albums);
+        cache.set(CACHE_KEYS.SAVED_ALBUMS, albums, CACHE_DURATIONS.savedMedia);
+      } catch {
+        setSavedAlbums([]);
+      }
+    };
+
+    const fetchSavedShows = async () => {
+      const cached = cache.get(CACHE_KEYS.SAVED_SHOWS);
+      if (cached) {
+        setSavedShows(cached);
+        return;
+      }
+
+      try {
+        const res = await axios.get(`${BACKEND_URL}/saved-shows?limit=20`);
+        const shows = res.data || [];
+        setSavedShows(shows);
+        cache.set(CACHE_KEYS.SAVED_SHOWS, shows, CACHE_DURATIONS.savedMedia);
+      } catch {
+        setSavedShows([]);
+      }
+    };
+
     const fetchNextInQueue = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/next-in-queue`);
@@ -243,6 +281,8 @@ function App() {
         fetchTopArtists(),
         fetchRecentlyPlayed(),
         fetchPlaylists(),
+        fetchSavedAlbums(),
+        fetchSavedShows(),
         fetchNextInQueue(),
         testWrappedAPI(), // Add this test
       ]);
@@ -347,6 +387,12 @@ function App() {
                   )}
                   {activeTab === "playlists" && (
                     <PlaylistsTab playlists={playlists} />
+                  )}
+                  {activeTab === "albums" && (
+                    <SavedAlbumsTab albums={savedAlbums} />
+                  )}
+                  {activeTab === "shows" && (
+                    <SavedShowsTab shows={savedShows} />
                   )}
                 </AnimatePresence>
                </div>

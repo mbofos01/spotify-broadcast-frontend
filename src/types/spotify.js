@@ -56,6 +56,31 @@
  */
 
 /**
+ * @typedef {Object} SpotifySavedAlbum
+ * @property {string} id
+ * @property {string} name
+ * @property {string[]} artists
+ * @property {string[]} artist_urls
+ * @property {string} release_date
+ * @property {number} total_tracks
+ * @property {string} spotify_url
+ * @property {string} image_url
+ */
+
+/**
+ * @typedef {Object} SpotifySavedShow
+ * @property {string} id
+ * @property {string} name
+ * @property {string} description
+ * @property {string} publisher
+ * @property {string} spotify_url
+ * @property {string} image_url
+ * @property {number} total_episodes
+ * @property {boolean} is_externally_hosted
+ * @property {string[]} languages
+ */
+
+/**
  * @typedef {Object} SpotifyWrappedData
  * @property {string} period
  * @property {SpotifyArtist[]} top_artists

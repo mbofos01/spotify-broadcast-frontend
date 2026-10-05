@@ -6,6 +6,8 @@ function TabNavigation({ activeTab, setActiveTab, onWrappedClick, showWrappedTab
     { id: "artists", label: "Artists" },
     { id: "recent", label: "Recently Played" },
     { id: "playlists", label: "Playlists" },
+    { id: "albums", label: "Saved Albums" },
+    { id: "shows", label: "Saved Shows" },
   ];
 
   const tabs = showWrappedTab 
