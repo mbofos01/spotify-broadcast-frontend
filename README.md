@@ -9,9 +9,8 @@ A real-time Spotify activity dashboard that displays your currently playing trac
 ### Mobile
 
 <div align="center">
-
-    <img src="assets/broadcast_mobile.jpg" alt="Broadcast Mobile" width="300"> <img src="assets/info_mobile.jpg" alt="Info Mobile" width="300"> 
-
+    <img src="assets/broadcast_mobile.jpg" alt="Broadcast Mobile" width="300"> 
+    <img src="assets/info_mobile.jpg" alt="Info Mobile" width="300"> 
 </div>
 
 ### PC
