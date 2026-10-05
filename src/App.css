@@ -144,7 +144,6 @@ body {
   height: 100%;
   border-radius: inherit;
   box-shadow: 0 0 12px rgba(29, 215, 96, 0.4);
-  transition: width 400ms ease;
 }
 
 .player-times {
