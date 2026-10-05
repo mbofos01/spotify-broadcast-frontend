@@ -21,9 +21,12 @@ function NothingPlayingCard() {
   }, []);
 
   return (
-    <div className="now-playing-glass center">
-      <h4 className="status-title">Nothing Playing</h4>
-      <p className="status-message">{randomMessage}</p>
+    <div className="nothing-playing" role="status">
+      <span className="nothing-playing-label">
+        <span className="nothing-playing-dot" aria-hidden="true" />
+        Nothing playing right now
+      </span>
+      <p className="nothing-playing-message">{randomMessage}</p>
     </div>
   );
 }

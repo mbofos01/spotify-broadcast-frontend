@@ -28,31 +28,72 @@ body {
 }
 
 .user-profile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 0 auto 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--broadcast-border);
+  position: fixed;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 20;
+}
+
+.user-avatar-btn {
+  position: relative;
+  display: block;
+  padding: 3px;
+  background: none;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+/* Live ring while something is playing, like a story ring */
+.user-avatar-btn.is-live {
+  border-color: var(--broadcast-green);
+  box-shadow: 0 0 0 1px rgba(30, 215, 96, 0.25), 0 0 14px rgba(30, 215, 96, 0.45);
+  animation: live-ring 2.4s ease-in-out infinite;
+}
+
+@keyframes live-ring {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(30, 215, 96, 0.25), 0 0 8px rgba(30, 215, 96, 0.3); }
+  50% { box-shadow: 0 0 0 1px rgba(30, 215, 96, 0.4), 0 0 18px rgba(30, 215, 96, 0.6); }
+}
+
+.user-avatar-btn:hover,
+.user-avatar-btn[aria-expanded="true"] {
+  border-color: var(--broadcast-green);
+  transform: scale(1.05);
+}
+
+.user-avatar-btn:focus-visible {
+  outline: 2px solid var(--broadcast-green);
+  outline-offset: 2px;
 }
 
 .user-avatar {
-  width: 60px !important;
-  height: 60px;
-  border: 2px solid rgba(255, 255, 255, 0.16);
+  display: block;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.user-profile-copy {
-  min-width: 0;
+.user-menu {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  min-width: 200px;
+  max-width: min(280px, calc(100vw - 1.8rem));
+  padding: 0.85rem 1rem;
+  background: var(--broadcast-surface-raised);
+  border: 1px solid var(--broadcast-border);
+  border-radius: 0.9rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
 }
 
 .user-name {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 650;
+  overflow-wrap: anywhere;
 }
 
 .user-name a {
@@ -342,21 +383,35 @@ body {
   border-color: var(--broadcast-green);
 }
 
-.now-playing-glass {
-  padding: 2rem;
-  color: var(--broadcast-text);
-  background: linear-gradient(145deg, #202822, #131714);
-  border: 1px solid var(--broadcast-border);
-  border-radius: 1.25rem;
-  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.25);
+.nothing-playing {
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
-.status-title {
-  font-weight: 700;
-}
-
-.status-message {
+.nothing-playing-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--broadcast-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nothing-playing-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--broadcast-muted);
+  border-radius: 50%;
+}
+
+.nothing-playing-message {
+  margin: 0.5rem 0 0;
+  color: var(--broadcast-text);
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
 /* Keep Recently Played rows identical to the other tabs inside the library panel */
@@ -383,8 +438,13 @@ body {
   }
 
   .user-profile {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    top: 0.6rem;
+    right: 0.6rem;
+  }
+
+  .user-avatar {
+    width: 34px;
+    height: 34px;
   }
 
   .dashboard-grid {
@@ -475,6 +535,322 @@ body {
 
   .player-title {
     font-size: 1.25rem;
+  }
+}
+
+/* One-screen layout. Card sizes are fixed so content never resizes them. */
+.is-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.is-dashboard > * {
+  flex-shrink: 0;
+}
+
+.is-dashboard > .text-center.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.is-dashboard > .text-center.mb-3 .btn {
+  padding: 0.45rem 1.1rem !important;
+  font-size: 0.85rem;
+}
+
+.is-dashboard .dashboard-grid,
+.is-dashboard .info-grid {
+  --bs-gutter-y: 1.25rem;
+  min-height: 0;
+}
+
+.is-dashboard .dashboard-grid {
+  flex: 0 1 480px;
+}
+
+.is-dashboard .dashboard-grid > div {
+  min-height: 0;
+}
+
+.is-dashboard .player-card {
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: 2.25rem;
+  height: 100%;
+  min-height: 0;
+  padding: 1.75rem;
+}
+
+.is-dashboard .player-artwork {
+  max-height: 100%;
+}
+
+.is-dashboard .player-title,
+.is-dashboard .player-artists,
+.is-dashboard .player-album {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.is-dashboard .player-title {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+}
+
+.is-dashboard .sidebar-panel {
+  height: 100%;
+  padding: 1.25rem;
+  overflow: hidden;
+}
+
+.is-dashboard .queue-section {
+  margin-bottom: 1rem;
+}
+
+.is-dashboard .recently-played {
+  margin-top: 0.75rem;
+}
+
+.is-dashboard .recent-track {
+  margin-bottom: 0.4rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.is-dashboard .recent-track img {
+  width: 44px !important;
+  height: 44px !important;
+}
+
+/* Info view shares the same shell */
+.is-dashboard .info-grid {
+  flex: 0 1 auto;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.is-dashboard .info-grid > div {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.is-dashboard .info-grid > div:last-child {
+  flex: 0 1 560px;
+  min-height: 0;
+}
+
+.is-dashboard .nothing-playing {
+  margin-bottom: 0.9rem;
+}
+
+.is-dashboard .library-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 0;
+  padding: 1.25rem 1.5rem;
+  overflow: hidden;
+}
+
+.is-dashboard .library-tabs {
+  flex: 0 0 auto;
+  margin-bottom: 1rem !important;
+  padding-bottom: 1rem;
+}
+
+.is-dashboard .library-tabs .btn {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.88rem;
+}
+
+.is-dashboard .library-panel > div:not(.library-tabs):not(.nothing-playing) {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+}
+
+/* No visible scrollbar; the list still scrolls by wheel or touch */
+.is-dashboard .library-panel > div:not(.library-tabs):not(.nothing-playing) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.is-dashboard .library-panel > div:not(.library-tabs):not(.nothing-playing)::-webkit-scrollbar {
+  display: none;
+}
+
+.is-dashboard .library-panel h5 {
+  margin-bottom: 0.75rem !important;
+  font-size: 0.95rem;
+}
+
+.is-dashboard .library-panel li {
+  margin-bottom: 0.35rem !important;
+  padding: 0.5rem 0.75rem;
+}
+
+.is-dashboard .library-panel li img,
+.is-dashboard .library-panel .recent-track img {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+@media (max-width: 767.98px) {
+  .is-dashboard {
+    justify-content: flex-start;
+    padding: 3.4rem 0.9rem 0.9rem;
+  }
+
+  .is-dashboard > .text-center.mb-3 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .is-dashboard > .text-center.mb-3 .btn {
+    width: auto;
+    max-width: none;
+  }
+
+  .is-dashboard .dashboard-grid {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    --bs-gutter-y: 0.85rem;
+  }
+
+  .is-dashboard .dashboard-grid > div:first-child {
+    flex: 1 1 0;
+  }
+
+  .is-dashboard .dashboard-grid > div:last-child {
+    flex: 0 0 auto;
+  }
+
+  .is-dashboard .player-card {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 0.9rem;
+    padding: 1rem;
+  }
+
+  .is-dashboard .player-artwork {
+    width: min(100%, 32dvh);
+    max-width: 100%;
+  }
+
+  .is-dashboard .player-eyebrow {
+    margin-bottom: 0.3rem;
+  }
+
+  .is-dashboard .player-title {
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+  }
+
+  .is-dashboard .player-album {
+    display: none;
+  }
+
+  .is-dashboard .player-progress {
+    margin: 0.85rem 0;
+  }
+
+  .is-dashboard .spotify-listen-link {
+    padding: 0.6rem 1rem;
+  }
+
+  .is-dashboard .sidebar-panel {
+    height: 7rem;
+    padding: 0.8rem;
+  }
+
+  .is-dashboard .queue-section {
+    margin-bottom: 0;
+  }
+
+  .is-dashboard .queue-section h5 {
+    margin-bottom: 0.4rem;
+  }
+
+  .is-dashboard .recently-played {
+    display: none;
+  }
+
+  .is-dashboard .info-grid {
+    flex: 1 1 0;
+  }
+
+  .is-dashboard .info-grid > div:last-child {
+    flex: 1 1 0;
+  }
+
+  .is-dashboard .library-panel {
+    padding: 0.6rem;
+  }
+
+  .is-dashboard .library-tabs {
+    gap: 0.35rem !important;
+    padding-bottom: 0.5rem;
+  }
+
+  .is-dashboard .library-tabs .btn {
+    padding: 0.35rem 0.4rem;
+    font-size: 0.78rem;
+  }
+}
+
+/* Loading screen: equalizer bars */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.loading-equalizer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 56px;
+}
+
+.loading-equalizer span {
+  width: 7px;
+  height: 100%;
+  background: var(--broadcast-green);
+  border-radius: 999px;
+  box-shadow: 0 0 14px rgba(30, 215, 96, 0.35);
+  transform-origin: center;
+  transform: scaleY(0.25);
+  animation: loading-eq 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes loading-eq {
+  from { transform: scaleY(0.25); }
+  to { transform: scaleY(1); }
+}
+
+.loading-label {
+  margin: 0;
+  color: var(--broadcast-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-equalizer span {
+    animation: none;
+    transform: scaleY(0.6);
   }
 }
 

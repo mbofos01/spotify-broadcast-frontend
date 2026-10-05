@@ -24,6 +24,35 @@ import { SpotifyWrapped } from "./components/SpotifyWrapped/SpotifyWrapped";
 import { cache, CACHE_KEYS, CACHE_DURATIONS } from "./utils/cache";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const MIN_BAR_LIGHTNESS = 0.6;
+
+// Lift dark colors so the progress bar stays visible on the dark track
+const ensureVisible = ([r, g, b]) => {
+  const rn = r / 255, gn = g / 255, bn = b / 255;
+  const max = Math.max(rn, gn, bn), min = Math.min(rn, gn, bn);
+  let l = (max + min) / 2;
+  if (l >= MIN_BAR_LIGHTNESS) return [r, g, b];
+
+  const d = max - min;
+  let h = 0, s = 0;
+  if (d !== 0) {
+    s = d / (1 - Math.abs(2 * l - 1));
+    if (max === rn) h = ((gn - bn) / d) % 6;
+    else if (max === gn) h = (bn - rn) / d + 2;
+    else h = (rn - gn) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+
+  l = MIN_BAR_LIGHTNESS;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  const [r1, g1, b1] =
+    h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x]
+    : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  return [r1, g1, b1].map((v) => Math.round((v + m) * 255));
+};
 
 function App() {
   const [track, setTrack] = useState(null);
@@ -81,8 +110,8 @@ function App() {
     async (url) => {
       try {
         const color = await fac.getColorAsync(url, { algorithm: "dominant" });
-        const darkened = color.rgb.replace("rgb", "rgba").replace(")", ",0.8)");
-        return `linear-gradient(90deg, ${color.hex}, ${darkened})`;
+        const [r, g, b] = ensureVisible(color.value);
+        return `linear-gradient(90deg, rgb(${r}, ${g}, ${b}), rgba(${r}, ${g}, ${b}, 0.8))`;
       } catch (err) {
         console.error("Color extraction error:", err);
         return "linear-gradient(90deg, #1DB954, #1ed760)";
@@ -278,8 +307,8 @@ function App() {
     return (
       <>
         <div className="broadcast-page">
-          <main className="container broadcast-container">
-            <UserProfile user={user} />
+          <main className="container broadcast-container is-dashboard">
+            <UserProfile user={user} isLive={Boolean(track?.track_id)} />
 
             {/* Remove the Spotify Wrapped Button from here */}
 
@@ -291,19 +320,11 @@ function App() {
               />
             )}
 
-            <div className="row g-4">
-              {/* Conditionally show Nothing Playing Card only when actually nothing is playing */}
-              {!track || !track.track_id ? (
-                <div className="col-12 col-lg-12">
-                  <div style={{ maxWidth: "24rem", margin: "0 auto" }}>
-                    <NothingPlayingCard />
-                  </div>
-                </div>
-              ) : null}
-
+            <div className="row g-4 info-grid">
               {/* Info Tab with Tabs */}
               <div className="col-12 col-lg-12" id="info-tab">
                <div className="library-panel">
+                {(!track || !track.track_id) && <NothingPlayingCard />}
                 <TabNavigation
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}
@@ -342,8 +363,8 @@ function App() {
   return (
     <>
       <div className="broadcast-page">
-        <main className="container broadcast-container">
-          <UserProfile user={user} maxNameLength={100} />
+        <main className="container broadcast-container is-dashboard">
+          <UserProfile user={user} maxNameLength={100} isLive />
 
           {/* Remove the Spotify Wrapped Button from here too */}
 
